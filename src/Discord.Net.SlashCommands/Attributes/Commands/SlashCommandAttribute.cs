@@ -1,6 +1,6 @@
 using System;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Use to create an Application Command. Stacks with <see cref="SlashGroupAttribute"/>

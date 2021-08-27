@@ -1,6 +1,6 @@
 using System;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Attribute used to add a pre-determined argument value

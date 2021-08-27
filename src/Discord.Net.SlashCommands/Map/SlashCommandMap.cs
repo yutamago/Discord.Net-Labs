@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     internal class SlashCommandMap<T> where T : class, IExecutableInfo
     {
@@ -10,7 +10,7 @@ namespace Discord.SlashCommands
 
         public IReadOnlyCollection<char> Seperators => _seperators;
 
-        public SlashCommandMap (SlashCommandService commandService, char[] seperators = null)
+        public SlashCommandMap (ApplicationCommandService commandService, char[] seperators = null)
         {
             if (seperators != null)
                 foreach (var seperator in seperators)

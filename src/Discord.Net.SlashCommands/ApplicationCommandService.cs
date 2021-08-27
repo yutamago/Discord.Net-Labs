@@ -2,7 +2,7 @@ using Discord.API;
 using Discord.API.Rest;
 using Discord.Logging;
 using Discord.Rest;
-using Discord.SlashCommands.Builders;
+using Discord.ApplicationCommands.Builders;
 using Discord.WebSocket;
 using System;
 using System.Collections.Concurrent;
@@ -13,35 +13,51 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
-    /// Provides the framework for self registering and self-executing Discord Application Commands
+    ///     Provides the framework for self registering and self-executing Discord Application Commands
     /// </summary>
-    public class SlashCommandService : IDisposable
+    public class ApplicationCommandService : IDisposable
     {
         /// <summary>
-        /// Occurs when a Slash Command related information is recieved
+        ///     Occurs when a Slash Command related information is recieved
         /// </summary>
-        public event Func<LogMessage, Task> Log { add { _logEvent.Add(value); } remove { _logEvent.Remove(value); } }
+        public event Func<LogMessage, Task> Log
+        {
+            add { _logEvent.Add(value); }
+            remove { _logEvent.Remove(value); }
+        }
         internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new AsyncEvent<Func<LogMessage, Task>>();
 
         /// <summary>
-        /// Occurs when a Slash Command is executed
+        ///     Occurs when a Slash Command is executed
         /// </summary>
-        public event Func<SlashCommandInfo, ISlashCommandContext, IResult, Task> SlashCommandExecuted { add { _slashCommandExecutedEvent.Add(value); } remove { _slashCommandExecutedEvent.Remove(value); } }
+        public event Func<SlashCommandInfo, ISlashCommandContext, IResult, Task> SlashCommandExecuted
+        {
+            add { _slashCommandExecutedEvent.Add(value); }
+            remove { _slashCommandExecutedEvent.Remove(value); }
+        }
         internal readonly AsyncEvent<Func<SlashCommandInfo, ISlashCommandContext, IResult, Task>> _slashCommandExecutedEvent = new AsyncEvent<Func<SlashCommandInfo, ISlashCommandContext, IResult, Task>>();
 
         /// <summary>
         /// Occurs when a Context Command is executed
         /// </summary>
-        public event Func<ContextCommandInfo, ISlashCommandContext, IResult, Task> ContextCommandExecuted { add { _contextCommandExecutedEvent.Add(value); } remove { _contextCommandExecutedEvent.Remove(value); } }
+        public event Func<ContextCommandInfo, ISlashCommandContext, IResult, Task> ContextCommandExecuted
+        {
+            add { _contextCommandExecutedEvent.Add(value); }
+            remove { _contextCommandExecutedEvent.Remove(value); }
+        }
         internal readonly AsyncEvent<Func<ContextCommandInfo, ISlashCommandContext, IResult, Task>> _contextCommandExecutedEvent = new AsyncEvent<Func<ContextCommandInfo, ISlashCommandContext, IResult, Task>>();
 
         /// <summary>
-        /// Occurs when a Message Component command is executed
+        ///     Occurs when a Message Component command is executed
         /// </summary>
-        public event Func<InteractionInfo, ISlashCommandContext, IResult, Task> InteractionExecuted { add { _interactionExecutedEvent.Add(value); } remove { _interactionExecutedEvent.Remove(value); } }
+        public event Func<InteractionInfo, ISlashCommandContext, IResult, Task> InteractionExecuted
+        {
+            add { _interactionExecutedEvent.Add(value); }
+            remove { _interactionExecutedEvent.Remove(value); }
+        }
         internal readonly AsyncEvent<Func<InteractionInfo, ISlashCommandContext, IResult, Task>> _interactionExecutedEvent = new AsyncEvent<Func<InteractionInfo, ISlashCommandContext, IResult, Task>>();
 
         private readonly ConcurrentDictionary<Type, ModuleInfo> _typedModuleDefs;
@@ -58,39 +74,39 @@ namespace Discord.SlashCommands
         internal readonly bool _runAsync, _throwOnError, _deleteUnkownCommandAck;
 
         /// <summary>
-        /// Represents all of the modules that are loaded in the <see cref="SlashCommandService"/>
+        ///     Represents all of the modules that are loaded in the <see cref="ApplicationCommandService"/>
         /// </summary>
         public IReadOnlyList<ModuleInfo> Modules => _moduleDefs.ToList();
 
         /// <summary>
-        /// Represents all of the executeable commands that are loaded in the <see cref="SlashCommandService"/> modules
+        ///     Represents all of the executeable commands that are loaded in the <see cref="ApplicationCommandService"/> modules
         /// </summary>
         public IReadOnlyList<SlashCommandInfo> SlashCommands => _moduleDefs.SelectMany(x => x.SlashCommands).ToList();
 
         public IReadOnlyList<ContextCommandInfo> ContextCommands => _moduleDefs.SelectMany(x => x.ContextCommands).ToList();
 
         /// <summary>
-        /// Represents all of the Interaction handlers that are loaded in the <see cref="SlashCommandService"/>
+        ///     Represents all of the Interaction handlers that are loaded in the <see cref="ApplicationCommandService"/>
         /// </summary>
         public IReadOnlyCollection<InteractionInfo> Interacions => _moduleDefs.SelectMany(x => x.Interactions).ToList();
 
         /// <summary>
-        /// Client that the Application Commands will be registered for
+        ///     Client that the Application Commands will be registered for
         /// </summary>
         public BaseSocketClient Client { get; }
 
         /// <summary>
-        /// Initialize a <see cref="SlashCommandService"/> with the default configurations
+        ///     Initialize a <see cref="ApplicationCommandService"/> with the default configurations
         /// </summary>
         /// <param name="discord">The client that will be used to register commands</param>
-        public SlashCommandService (BaseSocketClient discord) : this(discord, new SlashCommandServiceConfig()) { }
+        public ApplicationCommandService (BaseSocketClient discord) : this(discord, new ApplicationCommandServiceConfig()) { }
 
         /// <summary>
-        /// Initialize a <see cref="SlashCommandService"/> with configurations from a provided <see cref="SlashCommandServiceConfig"/>
+        ///     Initialize a <see cref="ApplicationCommandService"/> with configurations from a provided <see cref="ApplicationCommandServiceConfig"/>
         /// </summary>
         /// <param name="discord">The client that will be used to register commands</param>
         /// <param name="config">The configuration class</param>
-        public SlashCommandService (BaseSocketClient discord, SlashCommandServiceConfig config)
+        public ApplicationCommandService (BaseSocketClient discord, ApplicationCommandServiceConfig config)
         {
             _lock = new SemaphoreSlim(1, 1);
             _typedModuleDefs = new ConcurrentDictionary<Type, ModuleInfo>();
@@ -123,11 +139,17 @@ namespace Discord.SlashCommands
         }
 
         /// <summary>
-        /// Discover and load <see cref="SlashModuleBase{T}"/> from a given assembly
+        ///     Discover and load <see cref="ApplicationCommandModuleBase{T}"/> from a given assembly
         /// </summary>
-        /// <param name="assembly"><see cref="Assembly"/> the command modules are defined in</param>
-        /// <param name="services"><see cref="IServiceProvider"/> to be used when instantiating a command module</param>
-        /// <returns>Module information for the <see cref="SlashModuleBase{T}"/> types that are loaded to <see cref="SlashCommandService"/></returns>
+        /// <param name="assembly">
+        ///     <see cref="Assembly"/> the command modules are defined in
+        /// </param>
+        /// <param name="services">
+        ///     <see cref="IServiceProvider"/> to be used when instantiating a command module
+        /// </param>
+        /// <returns>
+        ///     Module information for the <see cref="ApplicationCommandModuleBase{T}"/> types that are loaded to <see cref="ApplicationCommandService"/>
+        /// </returns>
         public async Task<IEnumerable<ModuleInfo>> AddModules (Assembly assembly, IServiceProvider services)
         {
             services = services ?? EmptyServiceProvider.Instance;
@@ -182,12 +204,14 @@ namespace Discord.SlashCommands
         }
 
         /// <summary>
-        /// Register and update the Application Commands from <see cref="SlashCommandService.SlashCommands"/> while deleting the missing commands
+        ///     Register and update the Application Commands from <see cref="ApplicationCommandService.SlashCommands"/> while deleting the missing commands
         /// </summary>
-        /// <param name="guild">Optional guild parameter, if defined, the commands are registered as guild commands for the provide guild, else commands are
-        /// registered as global commands</param>
-        /// <param name="deleteMissing">If true, delete all of the commands that are not registered in the <see cref="SlashCommandService"/></param>
-        /// <returns></returns>
+        /// <param name="guild">
+        ///     Optional guild parameter, if defined, the commands are registered as guild commands for the provide guild, else commands are
+        ///     registered as global commands</param>
+        /// <param name="deleteMissing">
+        ///     If true, delete all of the commands that are not registered in the <see cref="ApplicationCommandService"/>
+        /// </param>
         public async Task SyncCommands (ulong? guildId = null, bool deleteMissing = true)
         {
             CheckApplicationId();
@@ -231,29 +255,33 @@ namespace Discord.SlashCommands
         }
 
         /// <summary>
-        /// Register a set of commands as "Guild Commands" to a guild
+        ///     Register a set of commands as "Guild Commands" to a guild
         /// </summary>
         /// <remarks>
-        /// Commands will be registered as standalone commands, if you want the <see cref="SlashGroupAttribute"/> to take effect,
-        /// use <see cref="AddModulesToGuild(IGuild, ModuleInfo[])"/>
+        ///     Commands will be registered as standalone commands, if you want the <see cref="SlashGroupAttribute"/> to take effect,
+        ///     use <see cref="AddModulesToGuild(IGuild, ModuleInfo[])"/>.
+        ///     <br/>
+        ///     <br/>
+        ///     <b>Note</b> This method will add each command one by one, this process is very ratelimit heavy.
+        ///     It's recommended to use BulkOverwrite instead.
         /// </remarks>
         /// <param name="guild">Guild the commands will be registered to</param>
         /// <param name="commands">Commands that will be registered</param>
         /// <returns></returns>
-        public async Task AddCommandsToGuild (IGuild guild, params SlashCommandInfo[] commands)
+        public async Task<IReadOnlyCollection<IApplicationCommand>> AddCommandsToGuild (IGuild guild, params ApplicationCommandProperties[] commands)
         {
             CheckApplicationId();
 
             if (guild == null)
                 throw new ArgumentException($"{nameof(guild)} cannot be null to call this function.");
 
-            foreach (var com in commands)
-            {
-            }
+            var result = await Task.WhenAll(commands.Select(x => guild.CreateApplicationCommandAsync(x)));
+
+            return result.ToImmutableArray();
         }
 
         /// <summary>
-        /// Register a set of modules as "Guild Commands" to a guild
+        ///     Register a set of modules as "Guild Commands" to a guild
         /// </summary>
         /// <param name="guild">Guild the commands will be registered to</param>
         /// <param name="modules">Modules that will be registered</param>
@@ -294,9 +322,9 @@ namespace Discord.SlashCommands
         }
 
         /// <summary>
-        /// Remove a loaded module from <see cref="SlashCommandService.Modules"/>
+        /// Remove a loaded module from <see cref="ApplicationCommandService.Modules"/>
         /// </summary>
-        /// <param name="type"><see cref="SlashModuleBase{T}"/> that will be removed</param>
+        /// <param name="type"><see cref="ApplicationCommandModuleBase{T}"/> that will be removed</param>
         /// <returns></returns>
         public async Task<bool> RemoveModuleAsync (Type type)
         {
@@ -511,7 +539,7 @@ namespace Discord.SlashCommands
             catch (InvalidOperationException ex)
             {
                 keywords.Reverse();
-                var result = ParseResult.FromError(SlashCommandError.ParseFailed, $"No Slash command was found with the name {string.Join(" ", keywords)}");
+                var result = ParseResult.FromError(ApplicationCommandError.ParseFailed, $"No Slash command was found with the name {string.Join(" ", keywords)}");
                 return Task.FromResult(result);
             }
         }

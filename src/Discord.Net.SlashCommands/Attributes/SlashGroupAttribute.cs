@@ -1,6 +1,6 @@
 using System;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Use to create nested Application Commands.

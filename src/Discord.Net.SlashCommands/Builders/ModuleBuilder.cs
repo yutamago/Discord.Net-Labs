@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands.Builders
+namespace Discord.ApplicationCommands.Builders
 {
     internal class ModuleBuilder
     {
@@ -14,7 +14,7 @@ namespace Discord.SlashCommands.Builders
         private readonly List<ContextCommandBuilder> _contextCommands;
         private readonly List<InteractionBuilder> _interactions;
 
-        public SlashCommandService CommandService { get; }
+        public ApplicationCommandService CommandService { get; }
         public ModuleBuilder Parent { get; }
         public string Name { get; set; }
         public string SlashGroupName { get; set; }
@@ -30,7 +30,7 @@ namespace Discord.SlashCommands.Builders
 
         internal TypeInfo TypeInfo { get; set; }
 
-        internal ModuleBuilder(SlashCommandService commandService, ModuleBuilder parent = null)
+        internal ModuleBuilder(ApplicationCommandService commandService, ModuleBuilder parent = null)
         {
             CommandService = commandService;
             Parent = parent;
@@ -98,7 +98,7 @@ namespace Discord.SlashCommands.Builders
             return this;
         }
 
-        internal ModuleInfo Build ( SlashCommandService commandService = null, ModuleInfo parent = null )
+        internal ModuleInfo Build ( ApplicationCommandService commandService = null, ModuleInfo parent = null )
         {
             return new ModuleInfo(this, commandService, parent);
         }

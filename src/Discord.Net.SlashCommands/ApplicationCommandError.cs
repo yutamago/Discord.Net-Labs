@@ -1,6 +1,6 @@
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
-    public enum SlashCommandError
+    public enum ApplicationCommandError
     {
         UnknownCommand = 1,
         ParseFailed = 2,

@@ -1,6 +1,6 @@
 using System;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Attribute used to set the "Default Permission" property of an Application Command

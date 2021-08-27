@@ -1,6 +1,6 @@
 using System;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Attribute for tagging a Message Component interaction handler, CustomId represents

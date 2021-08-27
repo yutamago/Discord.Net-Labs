@@ -1,4 +1,4 @@
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Represents a Slash Command parameter choice

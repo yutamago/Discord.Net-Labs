@@ -2,7 +2,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     internal class DefaultValueTypeReader<T> : TypeReader<T> where T : IConvertible
     {

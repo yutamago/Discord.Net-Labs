@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     internal sealed class TimeSpanTypeReader : TypeReader<TimeSpan>
     {
@@ -12,7 +12,7 @@ namespace Discord.SlashCommands
         {
             return ( TimeSpan.TryParseExact(( option.Value as string ).ToLowerInvariant(), Formats, CultureInfo.InvariantCulture, out var timeSpan) )
                 ? Task.FromResult(TypeReaderResult.FromSuccess(timeSpan))
-                : Task.FromResult(TypeReaderResult.FromError(SlashCommandError.ParseFailed, "Failed to parse TimeSpan"));
+                : Task.FromResult(TypeReaderResult.FromError(ApplicationCommandError.ParseFailed, "Failed to parse TimeSpan"));
         }
 
         private static readonly string[] Formats = {

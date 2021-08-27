@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Discord.SlashCommands.Builders
+namespace Discord.ApplicationCommands.Builders
 {
     internal class SlashParameterBuilder
     {

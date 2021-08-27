@@ -4645,7 +4645,7 @@
             </returns>
         </member>
         <member name="T:Discord.MessageCommandProperties">
-            <summary
+            <summary>
                 A class used to create message commands.
             </summary>
         </member>
@@ -4689,9 +4689,9 @@
                 The base command model that belongs to an application. 
             </summary>
         </member>
-        <member name="P:Discord.IApplicationCommand.Type">
+        <member name="P:Discord.IApplicationCommand.ApplicationId">
             <summary>
-                The type of the command
+                Gets the unique id of the parent application.
             </summary>
         </member>
         <member name="P:Discord.IApplicationCommand.Type">
@@ -4731,17 +4731,7 @@
         </member>
         <member name="T:Discord.IApplicationCommandInteractionData">
             <summary>
-                Represents data of an Interaction Command, see <see href="https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondata"/>.
-            </summary>
-        </member>
-        <member name="P:Discord.IApplicationCommandInteractionData.Id">
-            <summary>
-                The snowflake id of this command.
-            </summary>
-        </member>
-        <member name="P:Discord.IApplicationCommandInteractionData.Name">
-            <summary>
-                The name of this command.
+                Represents data of an Interaction Command, see <see href="https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-data-structure"/>.
             </summary>
         </member>
         <member name="P:Discord.IApplicationCommandInteractionData.Options">

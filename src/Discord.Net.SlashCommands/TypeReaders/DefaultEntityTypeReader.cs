@@ -2,7 +2,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     internal abstract class DefaultEntityTypeReader<T> : TypeReader<T> where T : class
     {
@@ -11,7 +11,7 @@ namespace Discord.SlashCommands
             if (option.Value != null)
                 return Task.FromResult(TypeReaderResult.FromSuccess(option.Value as T));
             else
-                return Task.FromResult(TypeReaderResult.FromError(SlashCommandError.ParseFailed, $"Provided input cannot be read as {nameof(IChannel)}"));
+                return Task.FromResult(TypeReaderResult.FromError(ApplicationCommandError.ParseFailed, $"Provided input cannot be read as {nameof(IChannel)}"));
         }
     }
 

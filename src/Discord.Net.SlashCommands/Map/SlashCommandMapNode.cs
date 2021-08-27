@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     internal class SlashCommandMapNode<T> where T : class, IExecutableInfo
     {
@@ -99,7 +99,7 @@ namespace Discord.SlashCommands
                     return node.GetCommand(keywords, ++index);
             }
 
-            return SearchResult<T>.FromError(name, SlashCommandError.UnknownCommand, $"No {typeof(T).FullName} found for {name}");
+            return SearchResult<T>.FromError(name, ApplicationCommandError.UnknownCommand, $"No {typeof(T).FullName} found for {name}");
         }
 
         public SearchResult<T> GetCommand (string text, int index, char[] seperators)

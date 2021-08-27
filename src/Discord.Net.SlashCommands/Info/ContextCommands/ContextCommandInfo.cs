@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     public abstract class ContextCommandInfo : ExecutableInfo, IApplicationCommandInfo
     {
@@ -14,7 +14,7 @@ namespace Discord.SlashCommands
 
         public override bool SupportsWildCards => false;
 
-        internal ContextCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, SlashCommandService commandService)
+        internal ContextCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
             : base(builder.Name, true, module, commandService, builder.Callback)
         {
             CommandType = builder.CommandType;
@@ -23,7 +23,7 @@ namespace Discord.SlashCommands
             Attributes = builder.Attributes;
         }
 
-        internal static ContextCommandInfo Create (Builders.ContextCommandBuilder builder, ModuleInfo module, SlashCommandService commandService)
+        internal static ContextCommandInfo Create (Builders.ContextCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
         {
             switch (builder.CommandType)
             {

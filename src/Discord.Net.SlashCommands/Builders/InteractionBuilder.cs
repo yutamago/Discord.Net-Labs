@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands.Builders
+namespace Discord.ApplicationCommands.Builders
 {
     internal class InteractionBuilder
     {
@@ -57,7 +57,7 @@ namespace Discord.SlashCommands.Builders
             return this;
         }
 
-        internal InteractionInfo Build (ModuleInfo module, SlashCommandService commandService) =>
+        internal InteractionInfo Build (ModuleInfo module, ApplicationCommandService commandService) =>
             new InteractionInfo(this, module, commandService);
     }
 }

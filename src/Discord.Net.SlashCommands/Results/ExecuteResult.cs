@@ -1,17 +1,17 @@
 using System;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     public class ExecuteResult : IResult
     {
         public Exception Exception { get; }
-        public SlashCommandError? Error { get; }
+        public ApplicationCommandError? Error { get; }
 
         public string ErrorReason { get; }
 
         public bool IsSuccess => !Error.HasValue;
 
-        private ExecuteResult (Exception exception, SlashCommandError? commandError, string errorReason)
+        private ExecuteResult (Exception exception, ApplicationCommandError? commandError, string errorReason)
         {
             Exception = exception;
             Error = commandError;
@@ -21,11 +21,11 @@ namespace Discord.SlashCommands
         public static ExecuteResult FromSuccess ( ) =>
             new ExecuteResult(null, null, null);
 
-        public static ExecuteResult FromError (SlashCommandError commandError, string reason) =>
+        public static ExecuteResult FromError (ApplicationCommandError commandError, string reason) =>
             new ExecuteResult(null, commandError, reason);
 
         public static ExecuteResult FromError (Exception exception) =>
-            new ExecuteResult(exception, SlashCommandError.Exception, exception.Message);
+            new ExecuteResult(exception, ApplicationCommandError.Exception, exception.Message);
 
         public static ExecuteResult FromError (IResult result) =>
             new ExecuteResult(null, result.Error, result.ErrorReason);

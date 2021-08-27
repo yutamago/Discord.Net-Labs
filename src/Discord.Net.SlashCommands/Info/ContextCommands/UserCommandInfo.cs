@@ -2,17 +2,17 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     public class UserCommandInfo : ContextCommandInfo
     {
-        internal UserCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, SlashCommandService commandService)
+        internal UserCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
             : base(builder, module, commandService) { }
 
         public override async Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services)
         {
             if (!( context.Interaction is SocketUserCommand userCommand ))
-                return ExecuteResult.FromError(SlashCommandError.ParseFailed, $"Provided {nameof(ISlashCommandContext)} does not belong to a User Command");
+                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(ISlashCommandContext)} does not belong to a User Command");
 
             services = services ?? EmptyServiceProvider.Instance;
 

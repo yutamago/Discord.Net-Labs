@@ -1,4 +1,4 @@
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Supported types of pre-defined parameter choices

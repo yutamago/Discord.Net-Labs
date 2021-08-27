@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
-    internal static class SlashCommandRestUtil
+    internal static class ApplicationCommandRestUtil
     {
         // Parameters
         public static ApplicationCommandOptionProperties ParseApplicationCommandOptionProps(this SlashParameterInfo parameterInfo)

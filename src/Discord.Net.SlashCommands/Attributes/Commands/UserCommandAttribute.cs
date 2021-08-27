@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// 

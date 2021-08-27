@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands.Builders
+namespace Discord.ApplicationCommands.Builders
 {
     internal class SlashCommandBuilder
     {
@@ -83,7 +83,7 @@ namespace Discord.SlashCommands.Builders
             return this;
         }
 
-        internal SlashCommandInfo Build (ModuleInfo module, SlashCommandService commandService) =>
+        internal SlashCommandInfo Build (ModuleInfo module, ApplicationCommandService commandService) =>
             new SlashCommandInfo(this, module, commandService);
     }
 }

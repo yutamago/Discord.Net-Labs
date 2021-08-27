@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Represents the info class of an executable command 
@@ -13,9 +13,9 @@ namespace Discord.SlashCommands
         protected readonly Func<ISlashCommandContext, object[], IServiceProvider, ExecutableInfo, Task> _action;
 
         /// <summary>
-        /// <see cref="SlashCommandService"/> this command belongs to
+        /// <see cref="ApplicationCommandService"/> this command belongs to
         /// </summary>
-        public SlashCommandService CommandService { get; }
+        public ApplicationCommandService CommandService { get; }
         /// <summary>
         /// Module this commands belongs to
         /// </summary>
@@ -31,7 +31,7 @@ namespace Discord.SlashCommands
 
         public abstract bool SupportsWildCards { get; }
 
-        internal ExecutableInfo (string name, bool ignoreGroupNames, ModuleInfo module, SlashCommandService commandService,
+        internal ExecutableInfo (string name, bool ignoreGroupNames, ModuleInfo module, ApplicationCommandService commandService,
             Func<ISlashCommandContext, object[], IServiceProvider, ExecutableInfo, Task> Callback)
         {
             Name = name;
@@ -45,8 +45,8 @@ namespace Discord.SlashCommands
         /// <summary>
         /// Execute this command using dependency injection
         /// </summary>
-        /// <param name="context">Context that will be injected to the <see cref="SlashModuleBase{T}"/></param>
-        /// <param name="services">Services that will be used while initializing the <see cref="SlashModuleBase{T}"/></param>
+        /// <param name="context">Context that will be injected to the <see cref="ApplicationCommandModuleBase{T}"/></param>
+        /// <param name="services">Services that will be used while initializing the <see cref="ApplicationCommandModuleBase{T}"/></param>
         /// <returns>A task representing the asyncronous command execution process</returns>
         public abstract Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services);
 
@@ -74,7 +74,7 @@ namespace Discord.SlashCommands
                 }
 
 
-                return ExecuteResult.FromError(SlashCommandError.Unsuccessful, "Command execution failed for an unknown reason");
+                return ExecuteResult.FromError(ApplicationCommandError.Unsuccessful, "Command execution failed for an unknown reason");
             }
             catch (Exception ex)
             {

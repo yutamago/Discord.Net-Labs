@@ -4,13 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands.Builders
+namespace Discord.ApplicationCommands.Builders
 {
     internal static class ModuleClassBuilder
     {
-        private static readonly TypeInfo ModuleTypeInfo = typeof(ISlashModuleBase).GetTypeInfo();
+        private static readonly TypeInfo ModuleTypeInfo = typeof(IApplicationCommandModuleBase).GetTypeInfo();
 
-        public static async Task<IEnumerable<TypeInfo>> SearchAsync (Assembly assembly, SlashCommandService commandService)
+        public static async Task<IEnumerable<TypeInfo>> SearchAsync (Assembly assembly, ApplicationCommandService commandService)
         {
             bool IsLoadableModule (TypeInfo info)
             {
@@ -36,7 +36,7 @@ namespace Discord.SlashCommands.Builders
             return result;
         }
 
-        public static async Task<Dictionary<Type, ModuleInfo>> BuildAsync (IEnumerable<TypeInfo> validTypes, SlashCommandService commandService,
+        public static async Task<Dictionary<Type, ModuleInfo>> BuildAsync (IEnumerable<TypeInfo> validTypes, ApplicationCommandService commandService,
             IServiceProvider services)
         {
             var topLevelGroups = validTypes.Where(x => x.DeclaringType == null || !IsValidModuleDefinition(x.DeclaringType.GetTypeInfo()));
@@ -60,7 +60,7 @@ namespace Discord.SlashCommands.Builders
             return result;
         }
 
-        private static void BuildModule (ModuleBuilder builder, TypeInfo typeInfo, SlashCommandService commandService,
+        private static void BuildModule (ModuleBuilder builder, TypeInfo typeInfo, ApplicationCommandService commandService,
             IServiceProvider services)
         {
             builder.Name = typeInfo.Name;
@@ -106,7 +106,7 @@ namespace Discord.SlashCommands.Builders
                 builder.AddInteraction(x => BuildInteraction(x, typeInfo, method, commandService, services));
         }
 
-        private static void BuildSubModules (ModuleBuilder parent, IEnumerable<TypeInfo> subModules, IList<TypeInfo> builtTypes, SlashCommandService commandService,
+        private static void BuildSubModules (ModuleBuilder parent, IEnumerable<TypeInfo> subModules, IList<TypeInfo> builtTypes, ApplicationCommandService commandService,
             IServiceProvider services, int slashGroupDepth = 0)
         {
             foreach (var submodule in subModules.Where(IsValidModuleDefinition))
@@ -131,7 +131,7 @@ namespace Discord.SlashCommands.Builders
         }
 
         private static void BuildSlashCommand (SlashCommandBuilder builder, TypeInfo typeInfo, MethodInfo methodInfo,
-            SlashCommandService commandService, IServiceProvider services)
+            ApplicationCommandService commandService, IServiceProvider services)
         {
             var attributes = methodInfo.GetCustomAttributes();
 
@@ -171,7 +171,7 @@ namespace Discord.SlashCommands.Builders
         }
 
         private static void BuildContextCommand (ContextCommandBuilder builder, TypeInfo typeInfo, MethodInfo methodInfo,
-            SlashCommandService commandService, IServiceProvider services)
+            ApplicationCommandService commandService, IServiceProvider services)
         {
             var attributes = methodInfo.GetCustomAttributes();
 
@@ -209,7 +209,7 @@ namespace Discord.SlashCommands.Builders
         }
 
         private static void BuildInteraction (InteractionBuilder builder, TypeInfo typeInfo, MethodInfo methodInfo,
-            SlashCommandService commandService, IServiceProvider services)
+            ApplicationCommandService commandService, IServiceProvider services)
         {
             if (!methodInfo.GetParameters().All(x => x.ParameterType == typeof(string) || x.ParameterType == typeof(string[])))
                 throw new InvalidOperationException($"Interaction method parameters all must be types of {typeof(string).Name} or {typeof(string[]).Name}");
@@ -242,9 +242,9 @@ namespace Discord.SlashCommands.Builders
         }
 
         private static Func<ISlashCommandContext, object[], IServiceProvider, ExecutableInfo, Task<IResult>> CreateCallback (TypeInfo typeInfo, MethodInfo methodInfo,
-            SlashCommandService commandService, IServiceProvider services)
+            ApplicationCommandService commandService, IServiceProvider services)
         {
-            var createInstance = ReflectionUtils.CreateBuilder<ISlashModuleBase>(typeInfo, commandService);
+            var createInstance = ReflectionUtils.CreateBuilder<IApplicationCommandModuleBase>(typeInfo, commandService);
 
             async Task<IResult> ExecuteCallback (ISlashCommandContext context, object[] args, IServiceProvider serviceProvider, ExecutableInfo commandInfo)
             {
@@ -273,7 +273,7 @@ namespace Discord.SlashCommands.Builders
             return ExecuteCallback;
         }
 
-        private static void BuildSlashParameter (SlashParameterBuilder builder, ParameterInfo paramInfo, SlashCommandService commandService,
+        private static void BuildSlashParameter (SlashParameterBuilder builder, ParameterInfo paramInfo, ApplicationCommandService commandService,
             IServiceProvider services)
         {
             var attributes = paramInfo.GetCustomAttributes();

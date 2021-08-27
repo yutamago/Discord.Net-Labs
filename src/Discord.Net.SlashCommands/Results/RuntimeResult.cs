@@ -2,17 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     public abstract class RuntimeResult : IResult
     {
-        public SlashCommandError? Error { get; }
+        public ApplicationCommandError? Error { get; }
 
         public string ErrorReason { get; }
 
         public bool IsSuccess => !Error.HasValue;
 
-        protected RuntimeResult (SlashCommandError? error, string reason )
+        protected RuntimeResult (ApplicationCommandError? error, string reason )
         {
             Error = error;
             ErrorReason = reason;

@@ -1,4 +1,4 @@
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     public interface IApplicationCommandInfo
     {

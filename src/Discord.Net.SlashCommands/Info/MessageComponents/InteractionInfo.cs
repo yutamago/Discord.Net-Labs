@@ -1,4 +1,4 @@
-using Discord.SlashCommands.Builders;
+using Discord.ApplicationCommands.Builders;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Porvides the information of a Interaction handler
@@ -25,7 +25,7 @@ namespace Discord.SlashCommands
 
         public override bool SupportsWildCards => true;
 
-        internal InteractionInfo (InteractionBuilder builder, ModuleInfo module, SlashCommandService commandService)
+        internal InteractionInfo (InteractionBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
             :base(builder.Name, builder.IgnoreGroupNames, module, commandService, builder.Callback)
         {
             Parameters = builder.Parameters.ToImmutableArray();

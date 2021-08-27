@@ -1,9 +1,9 @@
-using Discord.SlashCommands.Builders;
+using Discord.ApplicationCommands.Builders;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Contains the information of a Slash command module
@@ -13,7 +13,7 @@ namespace Discord.SlashCommands
         /// <summary>
         /// Command service this module belongs to
         /// </summary>
-        public SlashCommandService CommandService { get; }
+        public ApplicationCommandService CommandService { get; }
         /// <summary>
         /// Get the name of this module class
         /// </summary>
@@ -61,7 +61,7 @@ namespace Discord.SlashCommands
         /// </summary>
         public ModuleInfo Parent { get; }
         /// <summary>
-        /// <see langword="true"/> if this module is declared under another <see cref="SlashModuleBase{T}"/>
+        /// <see langword="true"/> if this module is declared under another <see cref="ApplicationCommandModuleBase{T}"/>
         /// </summary>
         public bool IsSubModule => Parent != null;
         /// <summary>
@@ -69,7 +69,7 @@ namespace Discord.SlashCommands
         /// </summary>
         public IReadOnlyList<Attribute> Attributes { get; }
 
-        internal ModuleInfo (ModuleBuilder builder, SlashCommandService commandService = null,  ModuleInfo parent = null)
+        internal ModuleInfo (ModuleBuilder builder, ApplicationCommandService commandService = null,  ModuleInfo parent = null)
         {
             CommandService = commandService ?? builder.CommandService;
 
@@ -91,7 +91,7 @@ namespace Discord.SlashCommands
             }
         }
 
-        private IEnumerable<ModuleInfo> BuildSubModules(ModuleBuilder builder, SlashCommandService commandService = null)
+        private IEnumerable<ModuleInfo> BuildSubModules(ModuleBuilder builder, ApplicationCommandService commandService = null)
         {
             var result = new List<ModuleInfo>();
 

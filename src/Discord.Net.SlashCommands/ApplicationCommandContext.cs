@@ -1,7 +1,7 @@
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <inheritdoc cref="ISlashCommandContext"/>
-    public class SlashCommandContext : ISlashCommandContext
+    public class ApplicationCommandContext : ISlashCommandContext
     {
         /// <inheritdoc/>
         public virtual IDiscordClient Client { get; }
@@ -20,7 +20,7 @@ namespace Discord.SlashCommands
 
         public InteractionType InvokerType => Interaction.Type;
 
-        public SlashCommandContext (IDiscordClient client, IMessageChannel channel, IUser user, IDiscordInteraction interaction)
+        public ApplicationCommandContext (IDiscordClient client, IMessageChannel channel, IUser user, IDiscordInteraction interaction)
         {
             Client = client;
             Channel = channel;

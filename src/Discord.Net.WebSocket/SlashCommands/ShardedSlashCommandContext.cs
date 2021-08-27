@@ -1,6 +1,6 @@
 using Discord.WebSocket;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// The sharded variant of <see cref="SocketSlashCommandContext"/>

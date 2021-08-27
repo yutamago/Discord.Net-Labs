@@ -1,8 +1,8 @@
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     public interface IResult
     {
-        SlashCommandError? Error { get; }
+        ApplicationCommandError? Error { get; }
         string ErrorReason { get; }
         bool IsSuccess { get; }
     }

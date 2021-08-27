@@ -1,9 +1,9 @@
-using Discord.SlashCommands.Builders;
+using Discord.ApplicationCommands.Builders;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Contains the information of a parameter from a Slash Command

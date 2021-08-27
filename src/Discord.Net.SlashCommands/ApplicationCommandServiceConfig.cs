@@ -1,9 +1,9 @@
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
-    /// Holds the general information to be used when initializing <see cref="SlashCommandContext"/>
+    /// Holds the general information to be used when initializing <see cref="ApplicationCommandContext"/>
     /// </summary>
-    public class SlashCommandServiceConfig
+    public class ApplicationCommandServiceConfig
     {
         /// <summary>
         /// Log severity for the logger
@@ -21,17 +21,17 @@ namespace Discord.SlashCommands
         public char[] InteractionCustomIdDelimiters { get; set; } = null;
 
         /// <summary>
-        /// Delete Slash Command acknowledgements if no interaction handler is found in the <see cref="SlashCommandService"/>
+        /// Delete Slash Command acknowledgements if no interaction handler is found in the <see cref="ApplicationCommandService"/>
         /// </summary>
         public bool DeleteUnknownSlashCommandAck { get; set; } = true;
 
         /// <summary>
-        /// Delete Message Component acknowledgements if no interaction handler is found in the <see cref="SlashCommandService"/>
+        /// Delete Message Component acknowledgements if no interaction handler is found in the <see cref="ApplicationCommandService"/>
         /// </summary>
         public bool DeleteUnkownComponentInteractionAck { get; set; } = true;
 
         /// <summary>
-        /// Delete Context Command acknowledgements if no interaction handler is found in the <see cref="SlashCommandService"/>
+        /// Delete Context Command acknowledgements if no interaction handler is found in the <see cref="ApplicationCommandService"/>
         /// </summary>
         public bool DeleteUnknownContextCommandAck { get; set; } = true;
     }

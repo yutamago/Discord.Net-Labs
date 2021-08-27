@@ -4,16 +4,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     internal static class ReflectionUtils
     {
         private static readonly TypeInfo ObjectTypeInfo = typeof(object).GetTypeInfo();
 
-        internal static T CreateObject<T> (TypeInfo typeInfo, SlashCommandService commandService, IServiceProvider services = null) =>
+        internal static T CreateObject<T> (TypeInfo typeInfo, ApplicationCommandService commandService, IServiceProvider services = null) =>
             CreateBuilder<T>(typeInfo, commandService)(services);
 
-        internal static Func<IServiceProvider, T> CreateBuilder<T> (TypeInfo typeInfo, SlashCommandService commandService)
+        internal static Func<IServiceProvider, T> CreateBuilder<T> (TypeInfo typeInfo, ApplicationCommandService commandService)
         {
             var constructor = GetConstructor(typeInfo);
             var parameters = constructor.GetParameters();
@@ -66,9 +66,9 @@ namespace Discord.SlashCommands
             }
             return result.ToArray();
         }
-        private static object GetMember (SlashCommandService commandService, IServiceProvider services, Type memberType, TypeInfo ownerType)
+        private static object GetMember (ApplicationCommandService commandService, IServiceProvider services, Type memberType, TypeInfo ownerType)
         {
-            if (memberType == typeof(SlashCommandService))
+            if (memberType == typeof(ApplicationCommandService))
                 return commandService;
             if (memberType == typeof(IServiceProvider) || memberType == services.GetType())
                 return services;
@@ -78,7 +78,7 @@ namespace Discord.SlashCommands
             throw new InvalidOperationException($"Failed to create \"{ownerType.FullName}\", dependency \"{memberType.Name}\" was not found.");
         }
 
-        internal static Func<IServiceProvider, T> CreateLambdaBuilder<T> (TypeInfo typeInfo, SlashCommandService commandService)
+        internal static Func<IServiceProvider, T> CreateLambdaBuilder<T> (TypeInfo typeInfo, ApplicationCommandService commandService)
         {
             var constructor = GetConstructor(typeInfo);
             var parameters = constructor.GetParameters();

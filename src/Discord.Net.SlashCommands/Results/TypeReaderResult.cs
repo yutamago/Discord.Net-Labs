@@ -2,19 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     public struct TypeReaderResult : IResult
     {
         public object Value { get; }
 
-        public SlashCommandError? Error { get; }
+        public ApplicationCommandError? Error { get; }
 
         public string ErrorReason { get; }
 
         public bool IsSuccess => !Error.HasValue;
 
-        public TypeReaderResult ( object value, SlashCommandError? error, string reason )
+        public TypeReaderResult ( object value, ApplicationCommandError? error, string reason )
         {
             Value = value;
             Error = error;
@@ -25,9 +25,9 @@ namespace Discord.SlashCommands
             new TypeReaderResult(value, null, null);
 
         public static TypeReaderResult FromError (Exception ex) =>
-            new TypeReaderResult(null, SlashCommandError.Exception, ex.Message);
+            new TypeReaderResult(null, ApplicationCommandError.Exception, ex.Message);
 
-        public static TypeReaderResult FromError (SlashCommandError error, string reason) =>
+        public static TypeReaderResult FromError (ApplicationCommandError error, string reason) =>
             new TypeReaderResult(null, error, reason);
 
         public static TypeReaderResult FromError (IResult result) =>

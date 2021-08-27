@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
-namespace Discord.SlashCommands
+namespace Discord.ApplicationCommands
 {
     /// <summary>
     /// Provides the information of a Slash Command
@@ -31,7 +31,7 @@ namespace Discord.SlashCommands
 
         public override bool SupportsWildCards => false;
 
-        internal SlashCommandInfo (Builders.SlashCommandBuilder builder, ModuleInfo module, SlashCommandService commandService)
+        internal SlashCommandInfo (Builders.SlashCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
             :base(builder.Name, builder.IgnoreGroupNames, module, commandService, builder.Callback)
         {
             Description = builder.Description;
@@ -54,7 +54,7 @@ namespace Discord.SlashCommands
                 return await ExecuteAsync(context, Parameters, args, services);
             }
             else
-                return ExecuteResult.FromError(SlashCommandError.ParseFailed, $"Provided {nameof(ISlashCommandContext)} belongs to a message component");
+                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(ISlashCommandContext)} belongs to a message component");
         }
 
         public async Task<IResult> ExecuteAsync (ISlashCommandContext context, IEnumerable<SlashParameterInfo> paramList,
