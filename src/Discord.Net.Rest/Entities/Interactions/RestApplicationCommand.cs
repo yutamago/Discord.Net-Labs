@@ -61,6 +61,7 @@ namespace Discord.Rest
             this.Name = model.Name;
             this.Description = model.Description;
             this.DefaultPermission = model.DefaultPermissions.GetValueOrDefault(true);
+            this.Type = model.Type;
 
             this.Options = model.Options.IsSpecified
                 ? model.Options.Value.Select(x => RestApplicationCommandOption.Create(x)).ToImmutableArray()
