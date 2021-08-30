@@ -4,12 +4,12 @@ namespace Discord.ApplicationCommands
 {
     internal interface IApplicationCommandModuleBase
     {
-        void SetContext (ISlashCommandContext context);
+        void SetContext (IInteractionContext context);
 
         void BeforeExecute (ExecutableInfo command);
 
         void AfterExecute (ExecutableInfo command);
 
-        void OnModuleBuilding (ApplicationCommandService commandService, ModuleInfo module);
+        void OnModuleBuilding (InteractionService commandService, ModuleInfo module);
     }
 }

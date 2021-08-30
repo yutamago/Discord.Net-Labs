@@ -8,7 +8,7 @@ namespace Discord.ApplicationCommands
     internal sealed class EnumTypeReader<T> : TypeReader<T> where T : Enum
     {
         public override ApplicationCommandOptionType GetDiscordType ( ) => ApplicationCommandOptionType.String;
-        public override Task<TypeReaderResult> ReadAsync (ISlashCommandContext context, SocketSlashCommandDataOption option, IServiceProvider services)
+        public override Task<TypeReaderResult> ReadAsync (IInteractionContext context, SocketSlashCommandDataOption option, IServiceProvider services)
         {
             try
             {

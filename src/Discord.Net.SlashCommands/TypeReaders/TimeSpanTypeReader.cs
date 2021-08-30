@@ -8,7 +8,7 @@ namespace Discord.ApplicationCommands
     internal sealed class TimeSpanTypeReader : TypeReader<TimeSpan>
     {
         public override ApplicationCommandOptionType GetDiscordType ( ) => ApplicationCommandOptionType.String;
-        public override Task<TypeReaderResult> ReadAsync (ISlashCommandContext context, SocketSlashCommandDataOption option, IServiceProvider services)
+        public override Task<TypeReaderResult> ReadAsync (IInteractionContext context, SocketSlashCommandDataOption option, IServiceProvider services)
         {
             return ( TimeSpan.TryParseExact(( option.Value as string ).ToLowerInvariant(), Formats, CultureInfo.InvariantCulture, out var timeSpan) )
                 ? Task.FromResult(TypeReaderResult.FromSuccess(timeSpan))

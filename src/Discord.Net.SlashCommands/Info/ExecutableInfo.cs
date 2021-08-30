@@ -10,12 +10,12 @@ namespace Discord.ApplicationCommands
     /// </summary>
     public abstract class ExecutableInfo : IExecutableInfo
     {
-        protected readonly Func<ISlashCommandContext, object[], IServiceProvider, ExecutableInfo, Task> _action;
+        protected readonly Func<IInteractionContext, object[], IServiceProvider, ExecutableInfo, Task> _action;
 
         /// <summary>
-        /// <see cref="ApplicationCommandService"/> this command belongs to
+        /// <see cref="InteractionService"/> this command belongs to
         /// </summary>
-        public ApplicationCommandService CommandService { get; }
+        public InteractionService CommandService { get; }
         /// <summary>
         /// Module this commands belongs to
         /// </summary>
@@ -31,8 +31,8 @@ namespace Discord.ApplicationCommands
 
         public abstract bool SupportsWildCards { get; }
 
-        internal ExecutableInfo (string name, bool ignoreGroupNames, ModuleInfo module, ApplicationCommandService commandService,
-            Func<ISlashCommandContext, object[], IServiceProvider, ExecutableInfo, Task> Callback)
+        internal ExecutableInfo (string name, bool ignoreGroupNames, ModuleInfo module, InteractionService commandService,
+            Func<IInteractionContext, object[], IServiceProvider, ExecutableInfo, Task> Callback)
         {
             Name = name;
             IgnoreGroupNames = ignoreGroupNames;
@@ -48,9 +48,9 @@ namespace Discord.ApplicationCommands
         /// <param name="context">Context that will be injected to the <see cref="ApplicationCommandModuleBase{T}"/></param>
         /// <param name="services">Services that will be used while initializing the <see cref="ApplicationCommandModuleBase{T}"/></param>
         /// <returns>A task representing the asyncronous command execution process</returns>
-        public abstract Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services);
+        public abstract Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services);
 
-        protected async Task<IResult> ExecuteInternalAsync (ISlashCommandContext context, object[] args, IServiceProvider services)
+        protected async Task<IResult> ExecuteInternalAsync (IInteractionContext context, object[] args, IServiceProvider services)
         {
             await CommandService._cmdLogger.DebugAsync($"Executing {GetLogString(context)}").ConfigureAwait(false);
 
@@ -103,7 +103,7 @@ namespace Discord.ApplicationCommands
             }
         }
 
-        protected abstract Task InvokeModuleEvent (ISlashCommandContext context, IResult result);
-        protected abstract string GetLogString (ISlashCommandContext context);
+        protected abstract Task InvokeModuleEvent (IInteractionContext context, IResult result);
+        protected abstract string GetLogString (IInteractionContext context);
     }
 }

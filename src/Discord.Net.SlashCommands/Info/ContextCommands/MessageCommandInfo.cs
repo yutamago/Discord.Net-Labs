@@ -6,13 +6,13 @@ namespace Discord.ApplicationCommands
 {
     public class MessageCommandInfo : ContextCommandInfo
     {
-        internal MessageCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
+        internal MessageCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, InteractionService commandService)
             : base(builder, module, commandService) { }
 
-        public override async Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services)
+        public override async Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services)
         {
             if (!( context.Interaction is SocketMessageCommand messageCommand ))
-                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(ISlashCommandContext)} does not belong to a Message Command");
+                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(IInteractionContext)} does not belong to a Message Command");
 
             services = services ?? EmptyServiceProvider.Instance;
 
@@ -40,7 +40,7 @@ namespace Discord.ApplicationCommands
             }
         }
 
-        protected override string GetLogString (ISlashCommandContext context)
+        protected override string GetLogString (IInteractionContext context)
         {
             if (context.Guild != null)
                 return $"Message Command: \"{Name}\" for {context.User} in {context.Guild}/{context.Channel}";

@@ -19,5 +19,8 @@ namespace Discord.API
 
         [JsonProperty("resolved")]
         public Optional<ApplicationCommandInteractionDataResolved> Resolved { get; set; }
+
+        [JsonIgnore]
+        string IDiscordInteractionData.CustomId => null;
     }
 }

@@ -11,7 +11,7 @@ namespace Discord.ApplicationCommands.Builders
         private readonly List<Attribute> _attributes;
         private readonly List<ParameterInfo> _parameters;
 
-        internal Func<ISlashCommandContext, object[], IServiceProvider, ExecutableInfo, Task> Callback { get; set; }
+        internal Func<IInteractionContext, object[], IServiceProvider, ExecutableInfo, Task> Callback { get; set; }
 
         public ModuleBuilder Module { get; }
         public string Name { get; set; }
@@ -20,7 +20,7 @@ namespace Discord.ApplicationCommands.Builders
         public IReadOnlyList<Attribute> Attributes => _attributes;
         public IReadOnlyList<ParameterInfo> Parameters => _parameters;
 
-        internal InteractionBuilder (ModuleBuilder module, Func<ISlashCommandContext, object[], IServiceProvider, ExecutableInfo, Task> callback) : this(module)
+        internal InteractionBuilder (ModuleBuilder module, Func<IInteractionContext, object[], IServiceProvider, ExecutableInfo, Task> callback) : this(module)
         {
             Callback = callback;
         }
@@ -57,7 +57,7 @@ namespace Discord.ApplicationCommands.Builders
             return this;
         }
 
-        internal InteractionInfo Build (ModuleInfo module, ApplicationCommandService commandService) =>
+        internal InteractionInfo Build (ModuleInfo module, InteractionService commandService) =>
             new InteractionInfo(this, module, commandService);
     }
 }

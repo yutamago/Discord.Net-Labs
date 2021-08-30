@@ -14,7 +14,7 @@ namespace Discord.ApplicationCommands
 
         public override bool SupportsWildCards => false;
 
-        internal ContextCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
+        internal ContextCommandInfo (Builders.ContextCommandBuilder builder, ModuleInfo module, InteractionService commandService)
             : base(builder.Name, true, module, commandService, builder.Callback)
         {
             CommandType = builder.CommandType;
@@ -23,7 +23,7 @@ namespace Discord.ApplicationCommands
             Attributes = builder.Attributes;
         }
 
-        internal static ContextCommandInfo Create (Builders.ContextCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
+        internal static ContextCommandInfo Create (Builders.ContextCommandBuilder builder, ModuleInfo module, InteractionService commandService)
         {
             switch (builder.CommandType)
             {
@@ -37,7 +37,7 @@ namespace Discord.ApplicationCommands
             }
         }
 
-        protected override Task InvokeModuleEvent (ISlashCommandContext context, IResult result)
+        protected override Task InvokeModuleEvent (IInteractionContext context, IResult result)
             => CommandService._contextCommandExecutedEvent.InvokeAsync(this, context, result);
     }
 }

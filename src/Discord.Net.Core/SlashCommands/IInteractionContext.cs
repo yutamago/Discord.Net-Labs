@@ -3,7 +3,7 @@ namespace Discord
     /// <summary>
     /// Represents the context of an Interaction
     /// </summary>
-    public interface ISlashCommandContext
+    public interface IInteractionContext
     {
         /// <summary>
         /// Client that will be used to handle this interaction

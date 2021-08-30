@@ -25,18 +25,18 @@ namespace Discord.ApplicationCommands
 
         public override bool SupportsWildCards => true;
 
-        internal InteractionInfo (InteractionBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
+        internal InteractionInfo (InteractionBuilder builder, ModuleInfo module, InteractionService commandService)
             :base(builder.Name, builder.IgnoreGroupNames, module, commandService, builder.Callback)
         {
             Parameters = builder.Parameters.ToImmutableArray();
             Attributes = builder.Attributes.ToImmutableArray();
         }
 
-        public override async Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services)
+        public override async Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services)
             => await ExecuteAsync(context, services, null).ConfigureAwait(false);
 
         /// <inheritdoc/>
-        public async Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services, params string[] additionalArgs)
+        public async Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services, params string[] additionalArgs)
         {
             if (context.Interaction is SocketMessageComponent messageInteraction)
             {
@@ -54,7 +54,7 @@ namespace Discord.ApplicationCommands
                 throw new ArgumentException("Cannot execute command from the provided command context");
         }
 
-        public async Task<IResult> ExecuteAsync (ISlashCommandContext context, IEnumerable<ParameterInfo> paramList, IEnumerable<string> values,
+        public async Task<IResult> ExecuteAsync (IInteractionContext context, IEnumerable<ParameterInfo> paramList, IEnumerable<string> values,
             IServiceProvider services)
         {
             services = services ?? EmptyServiceProvider.Instance;
@@ -104,10 +104,10 @@ namespace Discord.ApplicationCommands
             return result;
         }
 
-        protected override Task InvokeModuleEvent (ISlashCommandContext context, IResult result)
+        protected override Task InvokeModuleEvent (IInteractionContext context, IResult result)
             => CommandService._interactionExecutedEvent.InvokeAsync(this, context, result);
 
-        protected override string GetLogString (ISlashCommandContext context)
+        protected override string GetLogString (IInteractionContext context)
         {
             if (context.Guild != null)
                 return $"Component Interaction: \"{Name}\" for {context.User} in {context.Guild}/{context.Channel}";

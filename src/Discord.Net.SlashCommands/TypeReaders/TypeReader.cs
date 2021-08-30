@@ -8,7 +8,7 @@ namespace Discord.ApplicationCommands
     {
         public abstract bool CanConvertTo (Type type);
         public abstract ApplicationCommandOptionType GetDiscordType ();
-        public abstract Task<TypeReaderResult> ReadAsync (ISlashCommandContext context, SocketSlashCommandDataOption option, IServiceProvider services);
+        public abstract Task<TypeReaderResult> ReadAsync (IInteractionContext context, SocketSlashCommandDataOption option, IServiceProvider services);
         public virtual void Write(ApplicationCommandOptionProperties properties) { }
     }
 

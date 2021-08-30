@@ -34,7 +34,7 @@ namespace Discord.ApplicationCommands
                     throw new InvalidOperationException($"Type {typeof(T).FullName} is not supported by Discord.");
             }
         }
-        public override Task<TypeReaderResult> ReadAsync (ISlashCommandContext context, SocketSlashCommandDataOption option, IServiceProvider services)
+        public override Task<TypeReaderResult> ReadAsync (IInteractionContext context, SocketSlashCommandDataOption option, IServiceProvider services)
         {
             object value;
 

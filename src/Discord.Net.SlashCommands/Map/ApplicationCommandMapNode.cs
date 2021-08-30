@@ -6,24 +6,24 @@ using System.Text.RegularExpressions;
 
 namespace Discord.ApplicationCommands
 {
-    internal class SlashCommandMapNode<T> where T : class, IExecutableInfo
+    internal class ApplicationCommandMapNode<T> where T : class, IExecutableInfo
     {
         private const string WildCardStr = "*";
         private const string RegexWildCardExp = "(\\w+)?";
 
-        private ConcurrentDictionary<string, SlashCommandMapNode<T>> _nodes;
+        private ConcurrentDictionary<string, ApplicationCommandMapNode<T>> _nodes;
         private ConcurrentDictionary<string, T> _commands;
         private ConcurrentDictionary<Regex, T> _wildCardCommands;
 
-        public IReadOnlyDictionary<string, SlashCommandMapNode<T>> Nodes => _nodes;
+        public IReadOnlyDictionary<string, ApplicationCommandMapNode<T>> Nodes => _nodes;
         public IReadOnlyDictionary<string, T> Commands => _commands;
         public IReadOnlyDictionary<Regex, T> WildCardCommands => _wildCardCommands;
         public string Name { get; }
 
-        public SlashCommandMapNode (string name)
+        public ApplicationCommandMapNode (string name)
         {
             Name = name;
-            _nodes = new ConcurrentDictionary<string, SlashCommandMapNode<T>>();
+            _nodes = new ConcurrentDictionary<string, ApplicationCommandMapNode<T>>();
             _commands = new ConcurrentDictionary<string, T>();
             _wildCardCommands = new ConcurrentDictionary<Regex, T>();
         }
@@ -48,7 +48,7 @@ namespace Discord.ApplicationCommands
             }
             else
             {
-                var node = _nodes.GetOrAdd(keywords[index], (key) => new SlashCommandMapNode<T>(key));
+                var node = _nodes.GetOrAdd(keywords[index], (key) => new ApplicationCommandMapNode<T>(key));
                 node.AddCommand(keywords, ++index, commandInfo);
             }
         }

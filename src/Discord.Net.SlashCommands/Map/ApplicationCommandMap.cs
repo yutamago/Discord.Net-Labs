@@ -2,15 +2,15 @@ using System.Collections.Generic;
 
 namespace Discord.ApplicationCommands
 {
-    internal class SlashCommandMap<T> where T : class, IExecutableInfo
+    internal class ApplicationCommandMap<T> where T : class, IExecutableInfo
     {
         private readonly char[] _seperators = { ' ', '\n', '\r', ',' };
 
-        private readonly SlashCommandMapNode<T> _root = new SlashCommandMapNode<T>(null);
+        private readonly ApplicationCommandMapNode<T> _root = new ApplicationCommandMapNode<T>(null);
 
         public IReadOnlyCollection<char> Seperators => _seperators;
 
-        public SlashCommandMap (ApplicationCommandService commandService, char[] seperators = null)
+        public ApplicationCommandMap (char[] seperators = null)
         {
             if (seperators != null)
                 foreach (var seperator in seperators)

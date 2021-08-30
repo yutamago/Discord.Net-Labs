@@ -9,7 +9,7 @@ namespace Discord.ApplicationCommands
     /// Base class for any Slash command handling modules
     /// </summary>
     /// <typeparam name="T">Type of slash command context to be injected into the module</typeparam>
-    public abstract class ApplicationCommandModuleBase<T> : IApplicationCommandModuleBase where T : class, ISlashCommandContext
+    public abstract class ApplicationCommandModuleBase<T> : IApplicationCommandModuleBase where T : class, IInteractionContext
     {
         /// <summary>
         /// Command execution context for an user interaction.
@@ -33,8 +33,8 @@ namespace Discord.ApplicationCommands
         /// </summary>
         /// <param name="commandService">Command service the derived module belongs to</param>
         /// <param name="builder">Module builder responsible of building the derived type</param>
-        public virtual void OnModuleBuilding (ApplicationCommandService commandService, ModuleInfo module) { }
-        public virtual void SetContext (ISlashCommandContext context)
+        public virtual void OnModuleBuilding (InteractionService commandService, ModuleInfo module) { }
+        public virtual void SetContext (IInteractionContext context)
         {
             var newValue = context as T;
             Context = newValue ?? throw new InvalidOperationException($"Invalid context type. Expected {typeof(T).Name}, got {context.GetType().Name}.");

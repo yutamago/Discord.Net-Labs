@@ -13,7 +13,7 @@ namespace Discord.ApplicationCommands
         /// <summary>
         /// Command service this module belongs to
         /// </summary>
-        public ApplicationCommandService CommandService { get; }
+        public InteractionService CommandService { get; }
         /// <summary>
         /// Get the name of this module class
         /// </summary>
@@ -69,7 +69,7 @@ namespace Discord.ApplicationCommands
         /// </summary>
         public IReadOnlyList<Attribute> Attributes { get; }
 
-        internal ModuleInfo (ModuleBuilder builder, ApplicationCommandService commandService = null,  ModuleInfo parent = null)
+        internal ModuleInfo (ModuleBuilder builder, InteractionService commandService = null,  ModuleInfo parent = null)
         {
             CommandService = commandService ?? builder.CommandService;
 
@@ -91,7 +91,7 @@ namespace Discord.ApplicationCommands
             }
         }
 
-        private IEnumerable<ModuleInfo> BuildSubModules(ModuleBuilder builder, ApplicationCommandService commandService = null)
+        private IEnumerable<ModuleInfo> BuildSubModules(ModuleBuilder builder, InteractionService commandService = null)
         {
             var result = new List<ModuleInfo>();
 

@@ -1,7 +1,7 @@
 namespace Discord.ApplicationCommands
 {
-    /// <inheritdoc cref="ISlashCommandContext"/>
-    public class ApplicationCommandContext : ISlashCommandContext
+    /// <inheritdoc cref="IInteractionContext"/>
+    public class ApplicationCommandContext : IInteractionContext
     {
         /// <inheritdoc/>
         public virtual IDiscordClient Client { get; }

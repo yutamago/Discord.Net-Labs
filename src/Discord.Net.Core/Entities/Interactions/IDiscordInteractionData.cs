@@ -12,12 +12,17 @@ namespace Discord
     public interface IDiscordInteractionData : IEntity<ulong>
     {
         /// <summary>
-        ///     Gets the name of the invoked command.
+        ///     Gets the name of the invoked command if this interaction data is for an application command; otherwise <see langword="null"/>.
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        ///     Gets the type of the invoked command.
+        ///     Gets the custom id of the message component if this interaction data is for a message component; otherwise <see langword="null"/>
+        /// </summary>
+        string CustomId { get; }
+
+        /// <summary>
+        ///     Gets the type of the invoked command if this interaction data is for an application command.
         /// </summary>
         ApplicationCommandType Type { get; }
     }

@@ -4911,12 +4911,17 @@
         </member>
         <member name="P:Discord.IDiscordInteractionData.Name">
             <summary>
-                Gets the name of the invoked command.
+                Gets the name of the invoked command if this interaction data is for an application command; otherwise <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="P:Discord.IDiscordInteractionData.CustomId">
+            <summary>
+                Gets the custom id of the message component if this interaction data is for a message component; otherwise <see langword="null"/>
             </summary>
         </member>
         <member name="P:Discord.IDiscordInteractionData.Type">
             <summary>
-                Gets the type of the invoked command.
+                Gets the type of the invoked command if this interaction data is for an application command.
             </summary>
         </member>
         <member name="T:Discord.InteractionResponseType">

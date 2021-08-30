@@ -10,10 +10,10 @@ namespace Discord.ApplicationCommands
     {
         private static readonly TypeInfo ObjectTypeInfo = typeof(object).GetTypeInfo();
 
-        internal static T CreateObject<T> (TypeInfo typeInfo, ApplicationCommandService commandService, IServiceProvider services = null) =>
+        internal static T CreateObject<T> (TypeInfo typeInfo, InteractionService commandService, IServiceProvider services = null) =>
             CreateBuilder<T>(typeInfo, commandService)(services);
 
-        internal static Func<IServiceProvider, T> CreateBuilder<T> (TypeInfo typeInfo, ApplicationCommandService commandService)
+        internal static Func<IServiceProvider, T> CreateBuilder<T> (TypeInfo typeInfo, InteractionService commandService)
         {
             var constructor = GetConstructor(typeInfo);
             var parameters = constructor.GetParameters();
@@ -66,9 +66,9 @@ namespace Discord.ApplicationCommands
             }
             return result.ToArray();
         }
-        private static object GetMember (ApplicationCommandService commandService, IServiceProvider services, Type memberType, TypeInfo ownerType)
+        private static object GetMember (InteractionService commandService, IServiceProvider services, Type memberType, TypeInfo ownerType)
         {
-            if (memberType == typeof(ApplicationCommandService))
+            if (memberType == typeof(InteractionService))
                 return commandService;
             if (memberType == typeof(IServiceProvider) || memberType == services.GetType())
                 return services;
@@ -78,7 +78,7 @@ namespace Discord.ApplicationCommands
             throw new InvalidOperationException($"Failed to create \"{ownerType.FullName}\", dependency \"{memberType.Name}\" was not found.");
         }
 
-        internal static Func<IServiceProvider, T> CreateLambdaBuilder<T> (TypeInfo typeInfo, ApplicationCommandService commandService)
+        internal static Func<IServiceProvider, T> CreateLambdaBuilder<T> (TypeInfo typeInfo, InteractionService commandService)
         {
             var constructor = GetConstructor(typeInfo);
             var parameters = constructor.GetParameters();

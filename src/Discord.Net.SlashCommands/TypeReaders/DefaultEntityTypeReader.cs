@@ -6,7 +6,7 @@ namespace Discord.ApplicationCommands
 {
     internal abstract class DefaultEntityTypeReader<T> : TypeReader<T> where T : class
     {
-        public override Task<TypeReaderResult> ReadAsync (ISlashCommandContext context, SocketSlashCommandDataOption option, IServiceProvider services)
+        public override Task<TypeReaderResult> ReadAsync (IInteractionContext context, SocketSlashCommandDataOption option, IServiceProvider services)
         {
             if (option.Value != null)
                 return Task.FromResult(TypeReaderResult.FromSuccess(option.Value as T));

@@ -63,7 +63,7 @@ namespace Discord.ApplicationCommands
         /// A Task representing the asyncronous waiting operation with a <see cref="IDiscordInteraction"/> result,
         /// the result is null if the process timed out before receiving a valid Interaction.
         /// </returns>
-        public static async Task<SocketInteraction> WaitForMessageComponent (ISlashCommandContext ctx, TimeSpan timeout, bool sameUser = true,
+        public static async Task<SocketInteraction> WaitForMessageComponent (IInteractionContext ctx, TimeSpan timeout, bool sameUser = true,
             bool sameChannel = true, CancellationToken cancellationToken = default)
         {
             if(!(ctx.Client is BaseSocketClient baseSocketClient))
@@ -87,7 +87,7 @@ namespace Discord.ApplicationCommands
         /// A Task representing the asyncronous waiting operation with a <see cref="IDiscordInteraction"/> result,
         /// the result is null if the process timed out before receiving a valid Interaction.
         /// </returns>
-        public static async Task<SocketInteraction> WaitForMessageComponent (ISlashCommandContext ctx, TimeSpan timeout, string customId, bool sameUser = true,
+        public static async Task<SocketInteraction> WaitForMessageComponent (IInteractionContext ctx, TimeSpan timeout, string customId, bool sameUser = true,
             bool sameChannel = true, CancellationToken cancellationToken = default)
         {
             if (!( ctx.Client is BaseSocketClient baseSocketClient ))
@@ -98,7 +98,7 @@ namespace Discord.ApplicationCommands
             return await WaitForInteraction(baseSocketClient, timeout, predicate, cancellationToken).ConfigureAwait(false);
         }
 
-        private static bool CheckMessageComponent(ISlashCommandContext ctx, SocketInteraction interaction, string customId = null, bool checkId = true,
+        private static bool CheckMessageComponent(IInteractionContext ctx, SocketInteraction interaction, string customId = null, bool checkId = true,
             bool sameUser = true, bool sameChannel = true)
         {
             if (ctx.Interaction.Type != InteractionType.MessageComponent)

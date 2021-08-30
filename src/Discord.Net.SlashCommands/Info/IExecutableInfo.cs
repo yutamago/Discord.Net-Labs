@@ -24,6 +24,6 @@ namespace Discord.ApplicationCommands
         /// <param name="context">Context of the command</param>
         /// <param name="services">Dependencies that will be used to create the module instance</param>
         /// <returns></returns>
-        Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services);
+        Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services);
     }
 }

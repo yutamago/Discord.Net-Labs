@@ -34,6 +34,8 @@ namespace Discord.ApplicationCommands
         public static SearchResult<T> FromError (IResult result) =>
             new SearchResult<T>(null, null, null, result.Error, result.ErrorReason);
 
+        public static implicit operator SearchResult<IExecutableInfo>(SearchResult<T> r) => r;
+
         public override string ToString ( ) => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";
     }
 }

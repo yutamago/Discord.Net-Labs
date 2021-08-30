@@ -18,7 +18,7 @@ namespace Discord.ApplicationCommands
     /// <summary>
     ///     Provides the framework for self registering and self-executing Discord Application Commands
     /// </summary>
-    public class ApplicationCommandService : IDisposable
+    public class InteractionService : IDisposable
     {
         /// <summary>
         ///     Occurs when a Slash Command related information is recieved
@@ -33,37 +33,37 @@ namespace Discord.ApplicationCommands
         /// <summary>
         ///     Occurs when a Slash Command is executed
         /// </summary>
-        public event Func<SlashCommandInfo, ISlashCommandContext, IResult, Task> SlashCommandExecuted
+        public event Func<SlashCommandInfo, IInteractionContext, IResult, Task> SlashCommandExecuted
         {
             add { _slashCommandExecutedEvent.Add(value); }
             remove { _slashCommandExecutedEvent.Remove(value); }
         }
-        internal readonly AsyncEvent<Func<SlashCommandInfo, ISlashCommandContext, IResult, Task>> _slashCommandExecutedEvent = new AsyncEvent<Func<SlashCommandInfo, ISlashCommandContext, IResult, Task>>();
+        internal readonly AsyncEvent<Func<SlashCommandInfo, IInteractionContext, IResult, Task>> _slashCommandExecutedEvent = new AsyncEvent<Func<SlashCommandInfo, IInteractionContext, IResult, Task>>();
 
         /// <summary>
         /// Occurs when a Context Command is executed
         /// </summary>
-        public event Func<ContextCommandInfo, ISlashCommandContext, IResult, Task> ContextCommandExecuted
+        public event Func<ContextCommandInfo, IInteractionContext, IResult, Task> ContextCommandExecuted
         {
             add { _contextCommandExecutedEvent.Add(value); }
             remove { _contextCommandExecutedEvent.Remove(value); }
         }
-        internal readonly AsyncEvent<Func<ContextCommandInfo, ISlashCommandContext, IResult, Task>> _contextCommandExecutedEvent = new AsyncEvent<Func<ContextCommandInfo, ISlashCommandContext, IResult, Task>>();
+        internal readonly AsyncEvent<Func<ContextCommandInfo, IInteractionContext, IResult, Task>> _contextCommandExecutedEvent = new AsyncEvent<Func<ContextCommandInfo, IInteractionContext, IResult, Task>>();
 
         /// <summary>
         ///     Occurs when a Message Component command is executed
         /// </summary>
-        public event Func<InteractionInfo, ISlashCommandContext, IResult, Task> InteractionExecuted
+        public event Func<InteractionInfo, IInteractionContext, IResult, Task> InteractionExecuted
         {
             add { _interactionExecutedEvent.Add(value); }
             remove { _interactionExecutedEvent.Remove(value); }
         }
-        internal readonly AsyncEvent<Func<InteractionInfo, ISlashCommandContext, IResult, Task>> _interactionExecutedEvent = new AsyncEvent<Func<InteractionInfo, ISlashCommandContext, IResult, Task>>();
+        internal readonly AsyncEvent<Func<InteractionInfo, IInteractionContext, IResult, Task>> _interactionExecutedEvent = new AsyncEvent<Func<InteractionInfo, IInteractionContext, IResult, Task>>();
 
         private readonly ConcurrentDictionary<Type, ModuleInfo> _typedModuleDefs;
-        private readonly SlashCommandMap<SlashCommandInfo> _slashCommandMap;
-        private readonly SlashCommandMap<ContextCommandInfo> _contextCommandMap;
-        private readonly SlashCommandMap<InteractionInfo> _interactionCommandMap;
+        private readonly ApplicationCommandMap<SlashCommandInfo> _slashCommandMap;
+        private readonly ApplicationCommandMap<ContextCommandInfo> _contextCommandMap;
+        private readonly ApplicationCommandMap<InteractionInfo> _interactionCommandMap;
         private readonly HashSet<ModuleInfo> _moduleDefs;
         private readonly ConcurrentDictionary<Type, TypeReader> _typeReaders;
         private readonly ConcurrentDictionary<Type, Type> _genericTypeReaders;
@@ -74,19 +74,19 @@ namespace Discord.ApplicationCommands
         internal readonly bool _runAsync, _throwOnError, _deleteUnkownCommandAck;
 
         /// <summary>
-        ///     Represents all of the modules that are loaded in the <see cref="ApplicationCommandService"/>
+        ///     Represents all of the modules that are loaded in the <see cref="InteractionService"/>
         /// </summary>
         public IReadOnlyList<ModuleInfo> Modules => _moduleDefs.ToList();
 
         /// <summary>
-        ///     Represents all of the executeable commands that are loaded in the <see cref="ApplicationCommandService"/> modules
+        ///     Represents all of the executeable commands that are loaded in the <see cref="InteractionService"/> modules
         /// </summary>
         public IReadOnlyList<SlashCommandInfo> SlashCommands => _moduleDefs.SelectMany(x => x.SlashCommands).ToList();
 
         public IReadOnlyList<ContextCommandInfo> ContextCommands => _moduleDefs.SelectMany(x => x.ContextCommands).ToList();
 
         /// <summary>
-        ///     Represents all of the Interaction handlers that are loaded in the <see cref="ApplicationCommandService"/>
+        ///     Represents all of the Interaction handlers that are loaded in the <see cref="InteractionService"/>
         /// </summary>
         public IReadOnlyCollection<InteractionInfo> Interacions => _moduleDefs.SelectMany(x => x.Interactions).ToList();
 
@@ -96,17 +96,17 @@ namespace Discord.ApplicationCommands
         public BaseSocketClient Client { get; }
 
         /// <summary>
-        ///     Initialize a <see cref="ApplicationCommandService"/> with the default configurations
+        ///     Initialize a <see cref="InteractionService"/> with the default configurations
         /// </summary>
         /// <param name="discord">The client that will be used to register commands</param>
-        public ApplicationCommandService (BaseSocketClient discord) : this(discord, new ApplicationCommandServiceConfig()) { }
+        public InteractionService (BaseSocketClient discord) : this(discord, new ApplicationCommandServiceConfig()) { }
 
         /// <summary>
-        ///     Initialize a <see cref="ApplicationCommandService"/> with configurations from a provided <see cref="ApplicationCommandServiceConfig"/>
+        ///     Initialize a <see cref="InteractionService"/> with configurations from a provided <see cref="ApplicationCommandServiceConfig"/>
         /// </summary>
         /// <param name="discord">The client that will be used to register commands</param>
         /// <param name="config">The configuration class</param>
-        public ApplicationCommandService (BaseSocketClient discord, ApplicationCommandServiceConfig config)
+        public InteractionService (BaseSocketClient discord, ApplicationCommandServiceConfig config)
         {
             _lock = new SemaphoreSlim(1, 1);
             _typedModuleDefs = new ConcurrentDictionary<Type, ModuleInfo>();
@@ -116,9 +116,9 @@ namespace Discord.ApplicationCommands
             _logManager.Message += async msg => await _logEvent.InvokeAsync(msg).ConfigureAwait(false);
             _cmdLogger = _logManager.CreateLogger("Application Commands");
 
-            _slashCommandMap = new SlashCommandMap<SlashCommandInfo>(this);
-            _contextCommandMap = new SlashCommandMap<ContextCommandInfo>(this);
-            _interactionCommandMap = new SlashCommandMap<InteractionInfo>(this, config.InteractionCustomIdDelimiters);
+            _slashCommandMap = new ApplicationCommandMap<SlashCommandInfo>();
+            _contextCommandMap = new ApplicationCommandMap<ContextCommandInfo>();
+            _interactionCommandMap = new ApplicationCommandMap<InteractionInfo>(config.InteractionCustomIdDelimiters);
 
             Client = discord;
 
@@ -148,7 +148,7 @@ namespace Discord.ApplicationCommands
         ///     <see cref="IServiceProvider"/> to be used when instantiating a command module
         /// </param>
         /// <returns>
-        ///     Module information for the <see cref="ApplicationCommandModuleBase{T}"/> types that are loaded to <see cref="ApplicationCommandService"/>
+        ///     Module information for the <see cref="ApplicationCommandModuleBase{T}"/> types that are loaded to <see cref="InteractionService"/>
         /// </returns>
         public async Task<IEnumerable<ModuleInfo>> AddModules (Assembly assembly, IServiceProvider services)
         {
@@ -204,13 +204,13 @@ namespace Discord.ApplicationCommands
         }
 
         /// <summary>
-        ///     Register and update the Application Commands from <see cref="ApplicationCommandService.SlashCommands"/> while deleting the missing commands
+        ///     Register and update the Application Commands from <see cref="InteractionService.SlashCommands"/> while deleting the missing commands
         /// </summary>
         /// <param name="guild">
         ///     Optional guild parameter, if defined, the commands are registered as guild commands for the provide guild, else commands are
         ///     registered as global commands</param>
         /// <param name="deleteMissing">
-        ///     If true, delete all of the commands that are not registered in the <see cref="ApplicationCommandService"/>
+        ///     If true, delete all of the commands that are not registered in the <see cref="InteractionService"/>
         /// </param>
         public async Task SyncCommands (ulong? guildId = null, bool deleteMissing = true)
         {
@@ -254,56 +254,6 @@ namespace Discord.ApplicationCommands
             return props;
         }
 
-        /// <summary>
-        ///     Register a set of commands as "Guild Commands" to a guild
-        /// </summary>
-        /// <remarks>
-        ///     Commands will be registered as standalone commands, if you want the <see cref="SlashGroupAttribute"/> to take effect,
-        ///     use <see cref="AddModulesToGuild(IGuild, ModuleInfo[])"/>.
-        ///     <br/>
-        ///     <br/>
-        ///     <b>Note</b> This method will add each command one by one, this process is very ratelimit heavy.
-        ///     It's recommended to use BulkOverwrite instead.
-        /// </remarks>
-        /// <param name="guild">Guild the commands will be registered to</param>
-        /// <param name="commands">Commands that will be registered</param>
-        /// <returns></returns>
-        public async Task<IReadOnlyCollection<IApplicationCommand>> AddCommandsToGuild (IGuild guild, params ApplicationCommandProperties[] commands)
-        {
-            CheckApplicationId();
-
-            if (guild == null)
-                throw new ArgumentException($"{nameof(guild)} cannot be null to call this function.");
-
-            var result = await Task.WhenAll(commands.Select(x => guild.CreateApplicationCommandAsync(x)));
-
-            return result.ToImmutableArray();
-        }
-
-        /// <summary>
-        ///     Register a set of modules as "Guild Commands" to a guild
-        /// </summary>
-        /// <param name="guild">Guild the commands will be registered to</param>
-        /// <param name="modules">Modules that will be registered</param>
-        /// <returns></returns>
-        public async Task AddModulesToGuild (IGuild guild, params ModuleInfo[] modules)
-        {
-            CheckApplicationId();
-
-            if (guild == null)
-                throw new ArgumentException($"{nameof(guild)} cannot be null to call this function.");
-
-            var args = new List<CreateApplicationCommandParams>();
-
-            foreach(var commandArg in args)
-            {
-                ApplicationCommand result = await Client.ApiClient.CreateGuildApplicationCommandAsync(commandArg, guild.Id);
-
-                if (result == null)
-                    await _cmdLogger.WarningAsync($"Module could not be registered ({commandArg.Name})").ConfigureAwait(false);
-            }
-        }
-
         private void LoadModuleInternal (ModuleInfo module)
         {
             _moduleDefs.Add(module);
@@ -322,10 +272,15 @@ namespace Discord.ApplicationCommands
         }
 
         /// <summary>
-        /// Remove a loaded module from <see cref="ApplicationCommandService.Modules"/>
+        ///     Remove a loaded module from <see cref="InteractionService.Modules"/>.
         /// </summary>
-        /// <param name="type"><see cref="ApplicationCommandModuleBase{T}"/> that will be removed</param>
-        /// <returns></returns>
+        /// <param name="type">
+        ///     <see cref="ApplicationCommandModuleBase{T}"/> that will be removed.
+        /// </param>
+        /// <returns>
+        ///     A task that represents the asynchronous removal operation.
+        ///     The task result is <see langword="true"/> if the module was removed; otherwise <see langword="false"/>.
+        /// </returns>
         public async Task<bool> RemoveModuleAsync (Type type)
         {
             await _lock.WaitAsync().ConfigureAwait(false);
@@ -358,20 +313,55 @@ namespace Discord.ApplicationCommands
         }
 
         /// <summary>
-        /// Execute a command from a given <see cref="ISlashCommandContext"/>
+        ///     Execute a command or handler from a given <see cref="IInteractionContext"/>.
         /// </summary>
-        /// <param name="context">A command context that will be used to execute the command, <see cref="ISlashCommandContext.Interaction"/>
-        /// must be type of <see cref="SocketCommandInteraction"/></param>
-        /// <param name="input">Command string that will be used to parse the <see cref="SlashCommandInfo"/></param>
-        /// <param name="services">Services that will be injected into the declaring type</param>
-        /// <returns></returns>
-        public async Task<IResult> ExecuteCommandAsync (ISlashCommandContext context, string[] input, IServiceProvider services)
+        /// <param name="context">
+        ///     A command context that will be used to execute the command, <see cref="IInteractionContext.Interaction"/>
+        ///     must be type of <see cref="SocketCommandInteraction"/>.
+        /// </param>
+        /// <param name="input">
+        ///     Command string that will be used to parse the <see cref="SlashCommandInfo"/>.
+        /// </param>
+        /// <param name="services">
+        ///     Services that will be injected into the declaring type.
+        /// </param>
+        /// <returns>
+        ///     A task that represents the asynchronous execution operation.
+        ///     The task result is a <see cref="IResult"/> containing the result info on the execution of the command.  
+        /// </returns>
+        public async Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services)
         {
-            var result = _slashCommandMap.GetCommand(input);
+            SearchResult<IExecutableInfo> result;
+
+            switch (context.Interaction.Type)
+            {
+                case InteractionType.ApplicationCommand:
+                    switch (context.Interaction.Data.Type)
+                    {
+                        case ApplicationCommandType.User:
+                        case ApplicationCommandType.Message:
+                            result = _contextCommandMap.GetCommand(context.Interaction.Data.Name);
+                            break;
+                        case ApplicationCommandType.Slash:
+                            result = _slashCommandMap.GetCommand(context.Interaction.Data.Name);
+                            break;
+                        default:
+                            await _cmdLogger.WarningAsync($"Unknown application command type ({context.Interaction.Data.Type})");
+                            result = SearchResult<IExecutableInfo>.FromError("Unknown Interaction", ApplicationCommandError.UnknownCommand, "Unknown Interaction");
+                            break;
+                    }
+                    break;
+                case InteractionType.MessageComponent:
+                    result = _interactionCommandMap.GetCommand(context.Interaction.Data.CustomId);
+                    break;
+                default:
+                    result = SearchResult<IExecutableInfo>.FromError("Unknown Interaction", ApplicationCommandError.UnknownCommand, "Unknown Interaction");
+                    break;
+            }
 
             if (!result.IsSuccess)
             {
-                await _cmdLogger.DebugAsync($"Unknown slash command, skipping execution ({string.Join(" ", input).ToUpper()})");
+                await _cmdLogger.DebugAsync($"Unknown slash command, skipping execution");
 
                 if(_deleteUnkownCommandAck)
                 {
@@ -382,57 +372,6 @@ namespace Discord.ApplicationCommands
                 return result;
             }
             return await result.Command.ExecuteAsync(context, services).ConfigureAwait(false);
-        }
-
-        public async Task<IResult> ExecuteContextCommandAsync (ISlashCommandContext context, string input, IServiceProvider services)
-            => await ExecuteCommandAsync(context, new string[] { input }, services).ConfigureAwait(false);
-
-        public async Task<IResult> ExecuteContextCommandAsync (ISlashCommandContext context, string[] input, IServiceProvider services)
-        {
-            var result = _contextCommandMap.GetCommand(input);
-
-            if (!result.IsSuccess)
-            {
-                await _cmdLogger.DebugAsync($"Unknown context command, skipping execution ({string.Join(" ", input).ToUpper()})");
-
-                if (_deleteUnkownCommandAck)
-                {
-                    var response = await context.Interaction.GetOriginalResponseAsync().ConfigureAwait(false);
-                    await response.DeleteAsync().ConfigureAwait(false);
-                }
-
-                return result;
-            }
-            return await result.Command.ExecuteAsync(context, services).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Use to execute an Interaction Handler from a <see cref="IDiscordInteractable.CustomId"/>
-        /// </summary>
-        /// <param name="context">A command context that will be used to execute the command, <see cref="ISlashCommandContext.Interaction"/>
-        /// must be type of <see cref="SocketMessageInteraction"/></param>
-        /// <param name="input">String that will be used to parse the <see cref="InteractionInfo"/>,
-        /// set the <see cref="IDiscordInteractable.CustomId"/> of a message component the same as the <see cref="InteractionAttribute.CustomId"/> to handle
-        /// Message Component Interactions automatically</param>
-        /// <param name="services">Services that will be injected into the declaring type</param>
-        /// <returns></returns>
-        public async Task<IResult> ExecuteInteractionAsync (ISlashCommandContext context, string input, IServiceProvider services)
-        {
-            var result = _interactionCommandMap.GetCommand(input);
-
-            if (!result.IsSuccess)
-            {
-                await _cmdLogger.DebugAsync($"Unknown custom interaction id, skipping execution ({input.ToUpper()})");
-
-                if (_deleteUnkownCommandAck)
-                {
-                    var response = await context.Interaction.GetOriginalResponseAsync().ConfigureAwait(false);
-                    await response.DeleteAsync().ConfigureAwait(false);
-                }
-
-                return result;
-            }
-            return await result.Command.ExecuteAsync(context, services, result.WilCardMatch).ConfigureAwait(false);
         }
 
         internal TypeReader GetTypeReader (Type type)

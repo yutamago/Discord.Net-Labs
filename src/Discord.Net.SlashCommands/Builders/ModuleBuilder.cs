@@ -14,7 +14,7 @@ namespace Discord.ApplicationCommands.Builders
         private readonly List<ContextCommandBuilder> _contextCommands;
         private readonly List<InteractionBuilder> _interactions;
 
-        public ApplicationCommandService CommandService { get; }
+        public InteractionService CommandService { get; }
         public ModuleBuilder Parent { get; }
         public string Name { get; set; }
         public string SlashGroupName { get; set; }
@@ -30,7 +30,7 @@ namespace Discord.ApplicationCommands.Builders
 
         internal TypeInfo TypeInfo { get; set; }
 
-        internal ModuleBuilder(ApplicationCommandService commandService, ModuleBuilder parent = null)
+        internal ModuleBuilder(InteractionService commandService, ModuleBuilder parent = null)
         {
             CommandService = commandService;
             Parent = parent;
@@ -98,7 +98,7 @@ namespace Discord.ApplicationCommands.Builders
             return this;
         }
 
-        internal ModuleInfo Build ( ApplicationCommandService commandService = null, ModuleInfo parent = null )
+        internal ModuleInfo Build ( InteractionService commandService = null, ModuleInfo parent = null )
         {
             return new ModuleInfo(this, commandService, parent);
         }

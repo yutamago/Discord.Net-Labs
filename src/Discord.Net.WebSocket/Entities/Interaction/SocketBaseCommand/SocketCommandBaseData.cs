@@ -47,6 +47,8 @@ namespace Discord.WebSocket
 
         IReadOnlyCollection<IApplicationCommandInteractionDataOption> IApplicationCommandInteractionData.Options
             => (IReadOnlyCollection<IApplicationCommandInteractionDataOption>)Options;
+
+        public string CustomId => throw new System.NotImplementedException();
     }
 
     /// <summary>

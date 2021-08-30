@@ -5,7 +5,7 @@ namespace Discord.ApplicationCommands
     /// <summary>
     /// Represents a Web-Socket based context of an Application Command
     /// </summary>
-    public class SocketSlashCommandContext : ISlashCommandContext
+    public class SocketApplicationCommandContext : IInteractionContext
     {
         /// <summary>
         /// Get the <see cref="DiscordSocketClient"/> that the command will be executed with
@@ -36,26 +36,26 @@ namespace Discord.ApplicationCommands
         public SocketInteraction Interaction { get; }
 
         /// <inheritdoc/>
-        IDiscordClient ISlashCommandContext.Client => Client;
+        IDiscordClient IInteractionContext.Client => Client;
 
         /// <inheritdoc/>
-        IGuild ISlashCommandContext.Guild => Guild;
+        IGuild IInteractionContext.Guild => Guild;
 
         /// <inheritdoc/>
-        IMessageChannel ISlashCommandContext.Channel => Channel;
+        IMessageChannel IInteractionContext.Channel => Channel;
 
         /// <inheritdoc/>
-        IUser ISlashCommandContext.User => User;
+        IUser IInteractionContext.User => User;
 
         /// <inheritdoc/>
-        IDiscordInteraction ISlashCommandContext.Interaction => Interaction;
+        IDiscordInteraction IInteractionContext.Interaction => Interaction;
 
         /// <summary>
-        /// Initializes a new <see cref="SocketSlashCommandContext"/> 
+        /// Initializes a new <see cref="SocketApplicationCommandContext"/> 
         /// </summary>
         /// <param name="client">The underlying client</param>
         /// <param name="interaction">The underlying interaction</param>
-        public SocketSlashCommandContext
+        public SocketApplicationCommandContext
             (DiscordSocketClient client, SocketInteraction interaction)
         {
             Client = client;

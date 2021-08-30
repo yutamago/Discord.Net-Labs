@@ -31,7 +31,7 @@ namespace Discord.ApplicationCommands
 
         public override bool SupportsWildCards => false;
 
-        internal SlashCommandInfo (Builders.SlashCommandBuilder builder, ModuleInfo module, ApplicationCommandService commandService)
+        internal SlashCommandInfo (Builders.SlashCommandBuilder builder, ModuleInfo module, InteractionService commandService)
             :base(builder.Name, builder.IgnoreGroupNames, module, commandService, builder.Callback)
         {
             Description = builder.Description;
@@ -41,7 +41,7 @@ namespace Discord.ApplicationCommands
         }
 
         /// <inheritdoc/>
-        public override async Task<IResult> ExecuteAsync (ISlashCommandContext context, IServiceProvider services)
+        public override async Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services)
         {
             if (context.Interaction is SocketSlashCommand commandInteraction)
             {
@@ -54,10 +54,10 @@ namespace Discord.ApplicationCommands
                 return await ExecuteAsync(context, Parameters, args, services);
             }
             else
-                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(ISlashCommandContext)} belongs to a message component");
+                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(IInteractionContext)} belongs to a message component");
         }
 
-        public async Task<IResult> ExecuteAsync (ISlashCommandContext context, IEnumerable<SlashParameterInfo> paramList,
+        public async Task<IResult> ExecuteAsync (IInteractionContext context, IEnumerable<SlashParameterInfo> paramList,
             IEnumerable<SocketSlashCommandDataOption> argList, IServiceProvider services)
         {
             services = services ?? EmptyServiceProvider.Instance;
@@ -84,7 +84,7 @@ namespace Discord.ApplicationCommands
             }
         }
 
-        private async Task<object[]> GenerateArgs (ISlashCommandContext context, IEnumerable<SlashParameterInfo> paramList,
+        private async Task<object[]> GenerateArgs (IInteractionContext context, IEnumerable<SlashParameterInfo> paramList,
             IEnumerable<SocketSlashCommandDataOption> options, IServiceProvider services)
         {
             if (paramList?.Count() < options?.Count())
@@ -122,10 +122,10 @@ namespace Discord.ApplicationCommands
             return result.ToArray();
         }
 
-        protected override Task InvokeModuleEvent (ISlashCommandContext context, IResult result)
+        protected override Task InvokeModuleEvent (IInteractionContext context, IResult result)
             => CommandService._slashCommandExecutedEvent.InvokeAsync(this, context, result);
 
-        protected override string GetLogString (ISlashCommandContext context)
+        protected override string GetLogString (IInteractionContext context)
         {
             if (context.Guild != null)
                 return $"Slash Command: \"{Name}\" for {context.User} in {context.Guild}/{context.Channel}";
