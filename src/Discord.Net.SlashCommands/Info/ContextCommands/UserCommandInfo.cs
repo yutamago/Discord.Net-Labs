@@ -12,7 +12,7 @@ namespace Discord.ApplicationCommands
         public override async Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services)
         {
             if (!( context.Interaction is SocketUserCommand userCommand ))
-                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(IInteractionContext)} does not belong to a User Command");
+                return ExecuteResult.FromError(InteractionError.ParseFailed, $"Provided {nameof(IInteractionContext)} does not belong to a User Command");
 
             services = services ?? EmptyServiceProvider.Instance;
 

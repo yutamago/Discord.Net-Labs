@@ -9,13 +9,13 @@ namespace Discord.ApplicationCommands
         public string Text { get; }
         public T Command { get; }
         public string[] WilCardMatch { get; }
-        public ApplicationCommandError? Error { get; }
+        public InteractionError? Error { get; }
 
         public string ErrorReason { get; }
 
         public bool IsSuccess => !Error.HasValue;
 
-        private SearchResult(string text, T commandInfo, string[] wildCardMatch, ApplicationCommandError? error, string reason)
+        private SearchResult(string text, T commandInfo, string[] wildCardMatch, InteractionError? error, string reason)
         {
             Text = text;
             Error = error;
@@ -27,10 +27,10 @@ namespace Discord.ApplicationCommands
         public static SearchResult<T> FromSuccess (string text, T commandInfo, string[] wildCardMatch = null) =>
             new SearchResult<T>(text, commandInfo, wildCardMatch, null, null);
 
-        public static SearchResult<T> FromError (string text, ApplicationCommandError error, string reason) =>
+        public static SearchResult<T> FromError (string text, InteractionError error, string reason) =>
             new SearchResult<T>(text, null, null, error, reason);
         public static SearchResult<T> FromError (Exception ex) =>
-            new SearchResult<T>(null, null, null, ApplicationCommandError.Exception, ex.Message);
+            new SearchResult<T>(null, null, null, InteractionError.Exception, ex.Message);
         public static SearchResult<T> FromError (IResult result) =>
             new SearchResult<T>(null, null, null, result.Error, result.ErrorReason);
 

@@ -54,7 +54,7 @@ namespace Discord.ApplicationCommands
                 return await ExecuteAsync(context, Parameters, args, services);
             }
             else
-                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(IInteractionContext)} belongs to a message component");
+                return ExecuteResult.FromError(InteractionError.ParseFailed, $"Provided {nameof(IInteractionContext)} belongs to a message component");
         }
 
         public async Task<IResult> ExecuteAsync (IInteractionContext context, IEnumerable<SlashParameterInfo> paramList,

@@ -1,5 +1,7 @@
 using Discord.WebSocket;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +9,21 @@ namespace Discord.ApplicationCommands
 {
     public static class InteractionUtility
     {
+        internal static string[] GetKeywords(SocketSlashCommand command)
+        {
+            var keywords = new List<string> { command.Data.Name };
+
+            var child = command.Data.Options?.ElementAt(0);
+
+            while (child?.Type == ApplicationCommandOptionType.SubCommandGroup || child?.Type == ApplicationCommandOptionType.SubCommand)
+            {
+                keywords.Add(child.Name);
+                child = child.Options?.ElementAt(0);
+            }
+
+            return keywords.ToArray();
+        }
+
         /// <summary>
         /// Wait for an Interaction event for a given amount of time as an asynchronous opration
         /// </summary>

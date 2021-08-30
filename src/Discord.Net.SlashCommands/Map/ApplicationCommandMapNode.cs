@@ -99,7 +99,7 @@ namespace Discord.ApplicationCommands
                     return node.GetCommand(keywords, ++index);
             }
 
-            return SearchResult<T>.FromError(name, ApplicationCommandError.UnknownCommand, $"No {typeof(T).FullName} found for {name}");
+            return SearchResult<T>.FromError(name, InteractionError.UnknownCommand, $"No {typeof(T).FullName} found for {name}");
         }
 
         public SearchResult<T> GetCommand (string text, int index, char[] seperators)

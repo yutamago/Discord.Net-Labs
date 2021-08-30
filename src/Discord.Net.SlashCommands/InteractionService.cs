@@ -99,14 +99,14 @@ namespace Discord.ApplicationCommands
         ///     Initialize a <see cref="InteractionService"/> with the default configurations
         /// </summary>
         /// <param name="discord">The client that will be used to register commands</param>
-        public InteractionService (BaseSocketClient discord) : this(discord, new ApplicationCommandServiceConfig()) { }
+        public InteractionService (BaseSocketClient discord) : this(discord, new InteractionServiceConfig()) { }
 
         /// <summary>
-        ///     Initialize a <see cref="InteractionService"/> with configurations from a provided <see cref="ApplicationCommandServiceConfig"/>
+        ///     Initialize a <see cref="InteractionService"/> with configurations from a provided <see cref="InteractionServiceConfig"/>
         /// </summary>
         /// <param name="discord">The client that will be used to register commands</param>
         /// <param name="config">The configuration class</param>
-        public InteractionService (BaseSocketClient discord, ApplicationCommandServiceConfig config)
+        public InteractionService (BaseSocketClient discord, InteractionServiceConfig config)
         {
             _lock = new SemaphoreSlim(1, 1);
             _typedModuleDefs = new ConcurrentDictionary<Type, ModuleInfo>();
@@ -343,11 +343,12 @@ namespace Discord.ApplicationCommands
                             result = _contextCommandMap.GetCommand(context.Interaction.Data.Name);
                             break;
                         case ApplicationCommandType.Slash:
-                            result = _slashCommandMap.GetCommand(context.Interaction.Data.Name);
+                            var keywords = InteractionUtility.GetKeywords(context.Interaction as SocketSlashCommand);
+                            result = _slashCommandMap.GetCommand(keywords);
                             break;
                         default:
                             await _cmdLogger.WarningAsync($"Unknown application command type ({context.Interaction.Data.Type})");
-                            result = SearchResult<IExecutableInfo>.FromError("Unknown Interaction", ApplicationCommandError.UnknownCommand, "Unknown Interaction");
+                            result = SearchResult<IExecutableInfo>.FromError("Unknown Interaction", InteractionError.UnknownCommand, "Unknown Interaction");
                             break;
                     }
                     break;
@@ -355,7 +356,7 @@ namespace Discord.ApplicationCommands
                     result = _interactionCommandMap.GetCommand(context.Interaction.Data.CustomId);
                     break;
                 default:
-                    result = SearchResult<IExecutableInfo>.FromError("Unknown Interaction", ApplicationCommandError.UnknownCommand, "Unknown Interaction");
+                    result = SearchResult<IExecutableInfo>.FromError("Unknown Interaction", InteractionError.UnknownCommand, "Unknown Interaction");
                     break;
             }
 
@@ -478,7 +479,7 @@ namespace Discord.ApplicationCommands
             catch (InvalidOperationException ex)
             {
                 keywords.Reverse();
-                var result = ParseResult.FromError(ApplicationCommandError.ParseFailed, $"No Slash command was found with the name {string.Join(" ", keywords)}");
+                var result = ParseResult.FromError(InteractionError.ParseFailed, $"No Slash command was found with the name {string.Join(" ", keywords)}");
                 return Task.FromResult(result);
             }
         }

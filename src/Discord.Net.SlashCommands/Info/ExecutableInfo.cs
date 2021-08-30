@@ -74,7 +74,7 @@ namespace Discord.ApplicationCommands
                 }
 
 
-                return ExecuteResult.FromError(ApplicationCommandError.Unsuccessful, "Command execution failed for an unknown reason");
+                return ExecuteResult.FromError(InteractionError.Unsuccessful, "Command execution failed for an unknown reason");
             }
             catch (Exception ex)
             {

@@ -1,35 +1,40 @@
 using Discord.ApplicationCommands.Builders;
 using Discord.WebSocket;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Discord.ApplicationCommands
 {
     /// <summary>
-    /// Base class for any Slash command handling modules
+    ///     Base class for any Application command handling modules
     /// </summary>
     /// <typeparam name="T">Type of slash command context to be injected into the module</typeparam>
     public abstract class ApplicationCommandModuleBase<T> : IApplicationCommandModuleBase where T : class, IInteractionContext
     {
         /// <summary>
-        /// Command execution context for an user interaction.
+        ///     Command execution context for an user interaction.
         /// </summary>
         public T Context { get; private set; }
 
         /// <summary>
-        /// Method body to be executed after an application command execution
+        ///     Method body to be executed after an application command execution
         /// </summary>
-        /// <param name="command">Command information related to the Discord Application Command</param>
+        /// <param name="command">
+        ///     Command information related to the Discord Application Command
+        /// </param>
         public virtual void AfterExecute (ExecutableInfo command) { }
 
         /// <summary>
-        /// Method body to be executed before executing an application command
+        ///     Method body to be executed before executing an application command
         /// </summary>
-        /// <param name="command">Command information related to the Discord Application Command</param>
+        /// <param name="command">
+        ///     Command information related to the Discord Application Command
+        /// </param>
         public virtual void BeforeExecute (ExecutableInfo command) { }
 
         /// <summary>
-        /// Method body to be executed before the derived module is builded
+        ///     Method body to be executed before the derived module is builded
         /// </summary>
         /// <param name="commandService">Command service the derived module belongs to</param>
         /// <param name="builder">Module builder responsible of building the derived type</param>
@@ -58,12 +63,12 @@ namespace Discord.ApplicationCommands
             await response.DeleteAsync().ConfigureAwait(false);
         }
 
-        protected virtual async Task<SocketInteraction> WaitNextAsync (TimeSpan timeout, Predicate<SocketInteraction> predicate)
+        protected virtual async Task<SocketInteraction> WaitNextAsync (TimeSpan timeout, Predicate<SocketInteraction> predicate, CancellationToken token = default)
         {
             if (!( Context.Client is BaseSocketClient baseSocketClient ))
                 throw new InvalidOperationException("Provided client type is not supported");
 
-            return await InteractionUtility.WaitForInteraction(baseSocketClient, timeout, predicate).ConfigureAwait(false);
+            return await InteractionUtility.WaitForInteraction(baseSocketClient, timeout, predicate, token).ConfigureAwait(false);
         }
     }
 }

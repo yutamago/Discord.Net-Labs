@@ -1,7 +1,7 @@
 namespace Discord.ApplicationCommands
 {
     /// <inheritdoc cref="IInteractionContext"/>
-    public class ApplicationCommandContext : IInteractionContext
+    public class InteractionContext : IInteractionContext
     {
         /// <inheritdoc/>
         public virtual IDiscordClient Client { get; }
@@ -20,7 +20,7 @@ namespace Discord.ApplicationCommands
 
         public InteractionType InvokerType => Interaction.Type;
 
-        public ApplicationCommandContext (IDiscordClient client, IMessageChannel channel, IUser user, IDiscordInteraction interaction)
+        public InteractionContext (IDiscordClient client, IMessageChannel channel, IUser user, IDiscordInteraction interaction)
         {
             Client = client;
             Channel = channel;

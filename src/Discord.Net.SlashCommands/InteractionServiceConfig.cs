@@ -1,9 +1,9 @@
 namespace Discord.ApplicationCommands
 {
     /// <summary>
-    /// Holds the general information to be used when initializing <see cref="ApplicationCommandContext"/>
+    /// Holds the general information to be used when initializing <see cref="InteractionContext"/>
     /// </summary>
-    public class ApplicationCommandServiceConfig
+    public class InteractionServiceConfig
     {
         /// <summary>
         /// Log severity for the logger

@@ -1,6 +1,6 @@
 namespace Discord.ApplicationCommands
 {
-    public enum ApplicationCommandError
+    public enum InteractionError
     {
         UnknownCommand = 1,
         ParseFailed = 2,
