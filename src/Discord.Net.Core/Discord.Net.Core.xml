@@ -11878,17 +11878,17 @@
         <member name="F:Discord.RetryMode.AlwaysRetry">
             <summary> Continuously retry a request until it times out, its cancel token is triggered, or the server responds with a non-502 error. </summary>
         </member>
-        <member name="T:Discord.ISlashCommandContext">
+        <member name="T:Discord.IInteractionContext">
             <summary>
             Represents the context of an Interaction
             </summary>
         </member>
-        <member name="P:Discord.ISlashCommandContext.Client">
+        <member name="P:Discord.IInteractionContext.Client">
             <summary>
             Client that will be used to handle this interaction
             </summary>
         </member>
-        <member name="P:Discord.ISlashCommandContext.Guild">
+        <member name="P:Discord.IInteractionContext.Guild">
             <summary>
             Guild the interaction originated from
             </summary>
@@ -11896,17 +11896,17 @@
             Will be <see langword="null"/> if the interaction originated from a DM channel
             </remarks>
         </member>
-        <member name="P:Discord.ISlashCommandContext.Channel">
+        <member name="P:Discord.IInteractionContext.Channel">
             <summary>
             Channel the interaction originated from
             </summary>
         </member>
-        <member name="P:Discord.ISlashCommandContext.User">
+        <member name="P:Discord.IInteractionContext.User">
             <summary>
             User who invoked the interaction event
             </summary>
         </member>
-        <member name="P:Discord.ISlashCommandContext.Interaction">
+        <member name="P:Discord.IInteractionContext.Interaction">
             <summary>
             The underlying interaction
             </summary>
