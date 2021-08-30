@@ -12,7 +12,7 @@ namespace Discord.ApplicationCommands
         public override async Task<IResult> ExecuteAsync (IInteractionContext context, IServiceProvider services)
         {
             if (!( context.Interaction is SocketMessageCommand messageCommand ))
-                return ExecuteResult.FromError(ApplicationCommandError.ParseFailed, $"Provided {nameof(IInteractionContext)} does not belong to a Message Command");
+                return ExecuteResult.FromError(InteractionError.ParseFailed, $"Provided {nameof(IInteractionContext)} does not belong to a Message Command");
 
             services = services ?? EmptyServiceProvider.Instance;
 

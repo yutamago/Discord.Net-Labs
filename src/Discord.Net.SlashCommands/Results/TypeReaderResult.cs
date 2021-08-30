@@ -8,13 +8,13 @@ namespace Discord.ApplicationCommands
     {
         public object Value { get; }
 
-        public ApplicationCommandError? Error { get; }
+        public InteractionError? Error { get; }
 
         public string ErrorReason { get; }
 
         public bool IsSuccess => !Error.HasValue;
 
-        public TypeReaderResult ( object value, ApplicationCommandError? error, string reason )
+        public TypeReaderResult ( object value, InteractionError? error, string reason )
         {
             Value = value;
             Error = error;
@@ -25,9 +25,9 @@ namespace Discord.ApplicationCommands
             new TypeReaderResult(value, null, null);
 
         public static TypeReaderResult FromError (Exception ex) =>
-            new TypeReaderResult(null, ApplicationCommandError.Exception, ex.Message);
+            new TypeReaderResult(null, InteractionError.Exception, ex.Message);
 
-        public static TypeReaderResult FromError (ApplicationCommandError error, string reason) =>
+        public static TypeReaderResult FromError (InteractionError error, string reason) =>
             new TypeReaderResult(null, error, reason);
 
         public static TypeReaderResult FromError (IResult result) =>

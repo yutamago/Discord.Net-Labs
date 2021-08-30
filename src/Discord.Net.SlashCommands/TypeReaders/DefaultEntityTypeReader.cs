@@ -11,7 +11,7 @@ namespace Discord.ApplicationCommands
             if (option.Value != null)
                 return Task.FromResult(TypeReaderResult.FromSuccess(option.Value as T));
             else
-                return Task.FromResult(TypeReaderResult.FromError(ApplicationCommandError.ParseFailed, $"Provided input cannot be read as {nameof(IChannel)}"));
+                return Task.FromResult(TypeReaderResult.FromError(InteractionError.ParseFailed, $"Provided input cannot be read as {nameof(IChannel)}"));
         }
     }
 

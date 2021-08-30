@@ -5,11 +5,11 @@ namespace Discord.ApplicationCommands
     public struct ParseResult : IResult
     {
         public IApplicationCommand Command { get; }
-        public ApplicationCommandError? Error { get; }
+        public InteractionError? Error { get; }
         public string ErrorReason { get; }
         public bool IsSuccess => !Error.HasValue;
 
-        private ParseResult (IApplicationCommand command, ApplicationCommandError? error, string reason)
+        private ParseResult (IApplicationCommand command, InteractionError? error, string reason)
         {
             Command = command;
             Error = error;
@@ -20,12 +20,12 @@ namespace Discord.ApplicationCommands
             new ParseResult(command, null, null);
 
         public static ParseResult FromError (Exception ex) =>
-            new ParseResult(null, ApplicationCommandError.Exception, ex.Message);
+            new ParseResult(null, InteractionError.Exception, ex.Message);
 
         public static ParseResult FromError (IResult result) =>
             new ParseResult(null, result.Error, result.ErrorReason);
 
-        public static ParseResult FromError (ApplicationCommandError error, string reason) =>
+        public static ParseResult FromError (InteractionError error, string reason) =>
             new ParseResult(null, error, reason);
 
         public override string ToString ( ) => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";

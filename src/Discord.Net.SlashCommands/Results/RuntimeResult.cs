@@ -6,13 +6,13 @@ namespace Discord.ApplicationCommands
 {
     public abstract class RuntimeResult : IResult
     {
-        public ApplicationCommandError? Error { get; }
+        public InteractionError? Error { get; }
 
         public string ErrorReason { get; }
 
         public bool IsSuccess => !Error.HasValue;
 
-        protected RuntimeResult (ApplicationCommandError? error, string reason )
+        protected RuntimeResult (InteractionError? error, string reason )
         {
             Error = error;
             ErrorReason = reason;
