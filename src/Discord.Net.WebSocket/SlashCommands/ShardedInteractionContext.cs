@@ -3,9 +3,9 @@ using Discord.WebSocket;
 namespace Discord.ApplicationCommands
 {
     /// <summary>
-    /// The sharded variant of <see cref="SocketApplicationCommandContext"/>
+    /// The sharded variant of <see cref="SocketInteractionContext"/>
     /// </summary>
-    public class ShardedApplicationCommandContext : SocketApplicationCommandContext, IInteractionContext
+    public class ShardedInteractionContext : SocketInteractionContext, IInteractionContext
     {
         /// <summary>
         /// Get the <see cref="DiscordSocketClient"/> that the command will be executed with
@@ -13,11 +13,11 @@ namespace Discord.ApplicationCommands
         public new DiscordShardedClient Client { get; }
 
         /// <summary>
-        /// Initializes a <see cref="ShardedApplicationCommandContext"/>
+        /// Initializes a <see cref="ShardedInteractionContext"/>
         /// </summary>
         /// <param name="client">The underlying client.</param>
         /// <param name="interaction">The underlying interaction</param>
-        public ShardedApplicationCommandContext (DiscordShardedClient client, SocketInteraction interaction)
+        public ShardedInteractionContext (DiscordShardedClient client, SocketInteraction interaction)
             : base(client.GetShard(GetShardId(client, ( interaction.User as SocketGuildUser )?.Guild)), interaction)
         {
             Client = client;

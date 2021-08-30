@@ -5,7 +5,7 @@ namespace Discord.ApplicationCommands
     /// <summary>
     /// Represents a Web-Socket based context of an Application Command
     /// </summary>
-    public class SocketApplicationCommandContext : IInteractionContext
+    public class SocketInteractionContext : IInteractionContext
     {
         /// <summary>
         /// Get the <see cref="DiscordSocketClient"/> that the command will be executed with
@@ -51,11 +51,11 @@ namespace Discord.ApplicationCommands
         IDiscordInteraction IInteractionContext.Interaction => Interaction;
 
         /// <summary>
-        /// Initializes a new <see cref="SocketApplicationCommandContext"/> 
+        /// Initializes a new <see cref="SocketInteractionContext"/> 
         /// </summary>
         /// <param name="client">The underlying client</param>
         /// <param name="interaction">The underlying interaction</param>
-        public SocketApplicationCommandContext
+        public SocketInteractionContext
             (DiscordSocketClient client, SocketInteraction interaction)
         {
             Client = client;
