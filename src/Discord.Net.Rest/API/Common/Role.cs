@@ -21,6 +21,10 @@ namespace Discord.API
         public string Permissions { get; set; }
         [JsonProperty("managed")]
         public bool Managed { get; set; }
+        [JsonProperty("icon")]
+        public string Icon { get; set; }
+        [JsonProperty("unicode_emoji")]
+        public string UnicodeEmoji { get; set; }
         [JsonProperty("tags")]
         public Optional<RoleTags> Tags { get; set; }
     }

@@ -1,6 +1,6 @@
 using Discord.Rest;
 using System;
-using System.Collections.Generic;  
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,7 +37,15 @@ namespace Discord.WebSocket
         /// <inheritdoc />
         public int Position { get; private set; }
         /// <inheritdoc />
+        public string Icon { get; private set; }
+        /// <inheritdoc />
+        public Emoji UnicodeEmoji { get; private set; }
+        /// <inheritdoc />
         public RoleTags Tags { get; private set; }
+
+        /// <inheritdoc />
+        public string GetIconUrl()
+            => CDN.GetRoleIconUrl(Id, ""); // TODO: Where do you get this image hash from?
 
         /// <inheritdoc />
         public DateTimeOffset CreatedAt => SnowflakeUtils.FromSnowflake(Id);
@@ -54,7 +62,7 @@ namespace Discord.WebSocket
         /// <summary>
         /// Returns an IEnumerable containing all <see cref="SocketGuildUser"/> that have this role.
         /// </summary>
-        public IEnumerable<SocketGuildUser> Members 
+        public IEnumerable<SocketGuildUser> Members
             => Guild.Users.Where(x => x.Roles.Any(r => r.Id == Id));
 
         internal SocketRole(SocketGuild guild, ulong id)
@@ -77,6 +85,8 @@ namespace Discord.WebSocket
             Position = model.Position;
             Color = new Color(model.Color);
             Permissions = new GuildPermissions(model.Permissions);
+            Icon = model.Icon;
+            UnicodeEmoji = new Emoji(model.UnicodeEmoji);
             if (model.Tags.IsSpecified)
                 Tags = model.Tags.Value.ToEntity();
         }

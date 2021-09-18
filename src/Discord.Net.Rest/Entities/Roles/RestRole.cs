@@ -27,10 +27,19 @@ namespace Discord.Rest
         /// <inheritdoc />
         public int Position { get; private set; }
         /// <inheritdoc />
+        public string Icon { get; private set; }
+        /// <inheritdoc />
+        public Emoji UnicodeEmoji { get; private set; }
+        /// <inheritdoc />
         public RoleTags Tags { get; private set; }
 
         /// <inheritdoc />
         public DateTimeOffset CreatedAt => SnowflakeUtils.FromSnowflake(Id);
+
+        /// <inheritdoc />
+        public string GetIconUrl()
+            => CDN.GetRoleIconUrl(Id, ""); // TODO: Where do you get this image hash from?
+
         /// <summary>
         ///     Gets if this role is the @everyone role of the guild or not.
         /// </summary>
@@ -58,13 +67,15 @@ namespace Discord.Rest
             Position = model.Position;
             Color = new Color(model.Color);
             Permissions = new GuildPermissions(model.Permissions);
+            Icon = model.Icon;
+            UnicodeEmoji = new Emoji(model.UnicodeEmoji);
             if (model.Tags.IsSpecified)
                 Tags = model.Tags.Value.ToEntity();
         }
 
         /// <inheritdoc />
         public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
-        { 
+        {
             var model = await RoleHelper.ModifyAsync(this, Discord, func, options).ConfigureAwait(false);
             Update(model);
         }

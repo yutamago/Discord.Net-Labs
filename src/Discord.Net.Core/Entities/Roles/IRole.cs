@@ -66,6 +66,20 @@ namespace Discord
         /// </returns>
         int Position { get; }
         /// <summary>
+        ///     Gets or sets the id of this role's icon.
+        /// </summary>
+        /// <returns>
+        ///     A <see cref="string"/> containing the id of this role's icon.
+        /// </returns>
+        string Icon { get; }
+        /// <summary>
+        ///     Gets or sets the emoji for this role's icon.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="Emoji"/> object containing the emoji that is used as this role's icon.
+        /// </returns>
+        Emoji UnicodeEmoji { get; }
+        /// <summary>
         ///     Gets the tags related to this role.
         /// </summary>
         /// <returns>
@@ -86,5 +100,13 @@ namespace Discord
         ///     A task that represents the asynchronous modification operation.
         /// </returns>
         Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null);
+
+        /// <summary>
+        ///     Gets the role icons image url.
+        /// </summary>
+        /// <returns>
+        ///     A URL pointing to the role icon image.
+        /// </returns>
+        string GetIconUrl(); // TODO: should we leave size as an option?
     }
 }

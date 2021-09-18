@@ -183,10 +183,22 @@ namespace Discord
         /// <param name="stickerId">The id of the sticker.</param>
         /// <param name="format">The format of the sticker</param>
         /// <returns>
-        ///     A URL to the sticker.
+        ///     A URL pointing to the sticker image.
         /// </returns>
         public static string GetStickerUrl(ulong stickerId, StickerFormatType format = StickerFormatType.Png)
             => $"{DiscordConfig.CDNUrl}stickers/{stickerId}.{FormatToExtension(format)}";
+
+        /// <summary>
+        ///     Gets a role icons image url based off the id, the image hash and the preferred size of the image.
+        /// </summary>
+        /// <param name="roleId">The id of the role.</param>
+        /// <param name="imageHash">The hash of the image.</param>
+        /// <param name="size">The dimensions of the image. Defaults to 32 pixels.</param>
+        /// <returns>
+        ///     A URL pointing to the role icon image in the specified size.
+        /// </returns>
+        public static string GetRoleIconUrl(ulong roleId, string imageHash, ushort size = 32 /* TODO: should we add the icon format as an option? */)
+            => $"{DiscordConfig.CDNUrl}role-icons/{roleId}/{imageHash}.png?size={size}";
 
         private static string FormatToExtension(StickerFormatType format)
         {
